@@ -1,4 +1,6 @@
 package com.pi.tobeeb.Services;
 
-public class exemple {
+import java.io.Serializable;
+
+public class exemple implements Serializable {
 }

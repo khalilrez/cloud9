@@ -30,10 +30,10 @@ public class User implements Serializable {
  //private String Location;
  private String picture;
  @JsonIgnore
- @OneToMany(cascade = CascadeType.ALL, mappedBy ="appointment")
+ @OneToMany(cascade = CascadeType.ALL, mappedBy ="patient")
  private Set<Appointment> appointment;
 
- @OneToMany(cascade = CascadeType.ALL, mappedBy ="reclamation")
+ @OneToMany(cascade = CascadeType.ALL, mappedBy ="user")
  private Set<Reclamation> reclamation;
 
 }
