@@ -3,6 +3,7 @@ package com.pi.tobeeb.Entities;
 
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Entity
 @Table(name= "comments")
@@ -18,6 +19,9 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_post")
     private Post post;
+
+    @Column(name = "date_comment", nullable = false)
+    private Date dateComment;
 
 
 

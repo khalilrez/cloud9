@@ -12,16 +12,7 @@ public class PostController {
 
     @Autowired
     PostRepository repo;
-/*
-    @RequestMapping(value="/post",method = RequestMethod.GET)
-    public String helloWorld(@RequestParam(name = "sofien") String name, @RequestParam(name = "hedi") String lastname){
-        return "\nHello World from Spring Boot"+ name + lastname;
-    }
-    @RequestMapping(value="/post",method = RequestMethod.POST)
-    public String helloWorldPost(@RequestBody Post post){
-        return "\nHello World from Spring Boot POST " + post.getNamePost();
-    }
-    */
+
     @RequestMapping(value="/create",method = RequestMethod.POST)
     public Post createPost(@RequestBody Post post){
           return repo.save(post);

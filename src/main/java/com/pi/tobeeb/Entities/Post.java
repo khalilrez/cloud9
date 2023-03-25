@@ -2,6 +2,7 @@ package com.pi.tobeeb.Entities;
 
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,9 @@ public class Post {
 
     @Column(name = "content_post", nullable = false)
     private String contentPost;
+
+    @Column(name = "date_post", nullable = false)
+    private Date datePost;
 
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
