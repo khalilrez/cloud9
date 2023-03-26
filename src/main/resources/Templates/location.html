@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pharmacy Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+        .marker {
+            background-image: url('Static/mapbox-icon.png');
+            background-size: cover;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .mapboxgl-popup {
+            max-width: 200px;
+        }
+        .mapboxgl-popup-content {
+            text-align: center;
+            font-family: 'Open Sans', sans-serif;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+
+<script>
+    mapboxgl.accessToken ='pk.eyJ1IjoicmloYWJuYWJsaTIyIiwiYSI6ImNsZm9mYWRzYjBybGQzcm1oNDlxbHoycDgifQ.3mAZiCdrDOmBXNhGOxkxtg';
+
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [-6.8428201, 34.0364013],
+        zoom: 7
+    });
+
+    var pharmacies = [];
+
+    for (var i = 0; i < pharmacies.length; i++) {
+        var pharmacy = pharmacies[i];
+
+        var marker = new mapboxgl.Marker()
+            .setLngLat([pharmacy.amplitude, pharmacy.altitude])
+            .addTo(map);
+    }
+</script>
+</body>
+</html>
