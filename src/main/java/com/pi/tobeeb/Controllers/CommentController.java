@@ -1,8 +1,15 @@
 package com.pi.tobeeb.Controllers;
 import com.pi.tobeeb.Entities.Comment;
+import com.pi.tobeeb.Entities.Post;
 import com.pi.tobeeb.Repositorys.CommentRepository;
+import com.pi.tobeeb.Repositorys.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.Date;
+import java.util.Optional;
 
 
 @RestController
@@ -11,6 +18,9 @@ public class CommentController {
 
     @Autowired
     CommentRepository repo;
+
+    @Autowired
+    PostRepository postRepo;
 
 
 /*
@@ -23,9 +33,15 @@ public class CommentController {
         return "\nHello World from Spring Boot POST " + post.getNamePost();
     }
     */
-    @RequestMapping(value="/create",method = RequestMethod.POST)
-    public Comment createComment(@RequestBody Comment comment){
-          return repo.save(comment);
+    @RequestMapping(value="/create/{post_id}",method = RequestMethod.POST)
+    public ResponseEntity<Comment> createComment(@RequestBody Comment commentRequest, @PathVariable(value = "post_id") Long postId){
+        Post post = postRepo.findById(postId).orElse(null);
+        if(post!=null){
+        commentRequest.setPost(post);
+        commentRequest.setDateComment(new Date((new java.util.Date()).getTime()));
+        repo.save(commentRequest);
+        return new ResponseEntity<>(commentRequest, HttpStatus.CREATED);}
+        else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     @RequestMapping(value="/edit",method = RequestMethod.POST)
     public Comment editComment(@RequestBody Comment new_comment){

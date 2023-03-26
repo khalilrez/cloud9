@@ -9,6 +9,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,7 +22,7 @@ import java.util.Set;
 public class User implements Serializable {
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
-
+ @Column(name = "id_user")
  private int idUser;
  private String username;
  private String email;
@@ -36,4 +38,7 @@ public class User implements Serializable {
  @OneToMany(cascade = CascadeType.ALL, mappedBy ="user")
  private Set<Reclamation> reclamation;
 
+/*
+ @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+ private List<Post> posts = new ArrayList<>();*/
 }

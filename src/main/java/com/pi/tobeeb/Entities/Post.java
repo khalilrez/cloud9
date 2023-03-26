@@ -21,12 +21,17 @@ public class Post {
     @Column(name = "content_post", nullable = false)
     private String contentPost;
 
-    @Column(name = "date_post", nullable = false)
-    private Date datePost;
+    /*@Column(name = "date_post", nullable = true)
+    private Date datePost;*/
 
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+/*    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+*/
+    /*
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user", referencedColumnName = "id_user")
+    private User user;*/
 
 
     // constructors, getters, and setters
