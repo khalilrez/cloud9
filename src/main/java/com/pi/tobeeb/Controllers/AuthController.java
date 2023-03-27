@@ -97,12 +97,10 @@ public class AuthController {
         logger.error(String.valueOf(strRoles));
 
         if (strRoles == null) {
-            logger.error("hnee enaaaaaaaaaaaaaaa");
 
             Role userRole = roleRepository.findByName(ERole.PATIENT)
 
                     .orElseThrow(() -> new RuntimeException("Error: Role5 is not found."));
-            logger.error("hnee enaaaaaaaaaaaaaaa");
 
             roles.add(userRole);
         } else {
