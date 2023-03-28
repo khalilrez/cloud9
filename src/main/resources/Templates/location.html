@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Pharmacy Map</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-    <script src='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js'></script>
-    <link href='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css' rel='stylesheet' />
+    <title>Pharmacy Locations</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css' rel='stylesheet' />
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
         #map {
-            height: 600px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
             width: 100%;
         }
         .marker {
-            background-image: url('Static/mapbox-icon.png');
+            background-image: url('static/mapbox-icon.png');
             background-size: cover;
             width: 50px;
             height: 50px;
@@ -22,6 +29,7 @@
         .mapboxgl-popup {
             max-width: 200px;
         }
+
         .mapboxgl-popup-content {
             text-align: center;
             font-family: 'Open Sans', sans-serif;
@@ -29,27 +37,34 @@
     </style>
 </head>
 <body>
-<div id="map"></div>
+<div id='map' ></div>
 
+<script src='https://unpkg.com/axios/dist/axios.min.js'></script>
 <script>
-    mapboxgl.accessToken ='pk.eyJ1IjoicmloYWJuYWJsaTIyIiwiYSI6ImNsZm9mYWRzYjBybGQzcm1oNDlxbHoycDgifQ.3mAZiCdrDOmBXNhGOxkxtg';
+    mapboxgl.accessToken = 'pk.eyJ1IjoicmloYWJuYWJsaTIyIiwiYSI6ImNsZnNxNGlyeDA4bnYzbnNjenBxM3ZnMGkifQ.P2R2dZjqD3Mm5e6SXQFwiw';
 
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11',
-        center: [-6.8428201, 34.0364013],
-        zoom: 7
+        center: [-74.5, 40], // starting position [longitude, latitude]
+        zoom: 9 // starting zoom
     });
 
-    var pharmacies = [];
+    axios.get('/api/PharamcyLocation')
+        .then(function (response) {
+            var locations = response.data;
 
-    for (var i = 0; i < pharmacies.length; i++) {
-        var pharmacy = pharmacies[i];
-
-        var marker = new mapboxgl.Marker()
-            .setLngLat([pharmacy.amplitude, pharmacy.altitude])
-            .addTo(map);
-    }
+            locations.forEach(function(location) {
+                var marker = new mapboxgl.Marker()
+                    .setLngLat([location.altitude, location.amplitude])
+                    .setPopup(new mapboxgl.Popup({ offset: 25 })
+                        .setHTML('<h3>' + location.name + '</h3><p>' ))
+                    .addTo(map);
+            });
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 </script>
 </body>
 </html>
