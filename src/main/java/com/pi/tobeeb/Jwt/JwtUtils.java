@@ -1,8 +1,10 @@
 package com.pi.tobeeb.Jwt;
 import com.pi.tobeeb.Security.UserDetailsImp;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import java.util.Date;
@@ -12,7 +14,10 @@ public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
 
-    private String jwtSecret = "learn_programming_yourself";
+
+
+    private String jwtSecret="bezKoderSecretKey";
+    byte[] keyBytes = Keys.secretKeyFor(SignatureAlgorithm.HS512).getEncoded();
 
 
     private int jwtExpirationMs = 3600 * 5;
@@ -24,7 +29,7 @@ public class JwtUtils {
                 .setSubject((userPrincipal.getUsername()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(SignatureAlgorithm.HS512, keyBytes)
                 .compact();
     }
 
