@@ -31,6 +31,18 @@ public class User  {
  private String phonenumber;
  //private String Location;
  private String picture;
+ private String verificationToken;
+ private int isverified;
+ private String userCode;
+
+ public String getUserCode() {
+  return userCode;
+ }
+
+ public void setUserCode(String userCode) {
+  this.userCode = userCode;
+ }
+
  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
  @JoinTable(name = "userRoles",
          joinColumns = {
@@ -95,5 +107,19 @@ public class User  {
   this.role = roles;
  }
 
+ public String getVerificationToken() {
+  return verificationToken;
+ }
 
+ public void setVerificationToken(String verificationToken) {
+  this.verificationToken = verificationToken;
+ }
+
+ public int getIsverified() {
+  return isverified;
+ }
+
+ public void setIsverified(int isverified) {
+  this.isverified = isverified;
+ }
 }
