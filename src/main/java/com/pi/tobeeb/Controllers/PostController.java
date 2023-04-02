@@ -14,8 +14,9 @@ public class PostController {
     PostRepository repo;
 
     @RequestMapping(value="/create",method = RequestMethod.POST)
-    public Post createPost(@RequestBody Post post){
-          return repo.save(post);
+    public Post createPost(@RequestBody Post post ){
+
+    return repo.save(post);
     }
     @RequestMapping(value="/edit",method = RequestMethod.POST)
     public Post editPost(@RequestBody Post new_post){
@@ -39,6 +40,5 @@ public class PostController {
     }
 
 
-///////////////////////////////comment/////////////////
 
 }

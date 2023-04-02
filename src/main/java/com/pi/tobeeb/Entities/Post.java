@@ -20,6 +20,10 @@ public class Post {
 
     @Column(name = "content_post", nullable = false)
     private String contentPost;
+/*
+    @ManyToOne
+    @JoinColumn(name = "idUser")
+    private User user;*/
 
     /*@Column(name = "date_post", nullable = true)
     private Date datePost;*/
@@ -28,11 +32,22 @@ public class Post {
 /*    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 */
-    /*
+/*
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user", referencedColumnName = "id_user")
-    private User user;*/
+    private User user;
 
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }*/
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Reaction> reactions;
 
     // constructors, getters, and setters
     public Post() {

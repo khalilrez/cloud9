@@ -27,9 +27,24 @@ public class Comment {
     private Post post;
 
 
+   /* @ManyToOne
+    @JoinColumn(name = "idUser")
+    private User user;*/
+    /*
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_user", referencedColumnName = "id_user")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
 
 
+    public User getUser() {
+        return user;
+    }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+*/
     public Comment() {
 
     }

@@ -1,6 +1,7 @@
 package com.pi.tobeeb.Controllers;
 import com.pi.tobeeb.Entities.Comment;
 import com.pi.tobeeb.Entities.Post;
+import com.pi.tobeeb.Entities.Reaction;
 import com.pi.tobeeb.Repositorys.CommentRepository;
 import com.pi.tobeeb.Repositorys.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
-import java.util.Optional;
 
 
 @RestController
@@ -21,6 +21,7 @@ public class CommentController {
 
     @Autowired
     PostRepository postRepo;
+
 
 
 /*
@@ -36,7 +37,12 @@ public class CommentController {
     @RequestMapping(value="/create/{post_id}",method = RequestMethod.POST)
     public ResponseEntity<Comment> createComment(@RequestBody Comment commentRequest, @PathVariable(value = "post_id") Long postId){
         Post post = postRepo.findById(postId).orElse(null);
-        if(post!=null){
+        if(post!=null ){
+            /*
+            commentRequest.setUser(user);
+ */
+
+
         commentRequest.setPost(post);
         commentRequest.setDateComment(new Date((new java.util.Date()).getTime()));
         repo.save(commentRequest);
@@ -49,8 +55,13 @@ public class CommentController {
         old_comment.setContent(new_comment.getContent());
         return repo.save(old_comment);
     }
+    @RequestMapping(value="/bypost",method = RequestMethod.GET)
+    public Iterable<Comment> findByPost(@RequestParam("post_id") Long postId){
+        return repo.findAllByPostId(postId);
+    }
     @RequestMapping(value="/remove",method = RequestMethod.DELETE)
-    public void removeComment(@RequestBody Comment comment){
+    public void removeComment(@RequestParam("id") Long commentId)
+    { Comment comment = repo.findById(commentId).orElse(null);
        repo.delete(comment);
     }
     @RequestMapping(value="/read" ,method = RequestMethod.GET)
