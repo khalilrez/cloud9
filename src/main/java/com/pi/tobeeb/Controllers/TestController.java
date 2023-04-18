@@ -21,7 +21,7 @@ public class TestController {
     @GetMapping("/patient")
     @PreAuthorize("hasRole('ROLE_PATIENT')")
     public String userAccess() {
-        logger.error("iiiiiicccjjjciiiiiiiiii");
+        logger.error("iiiiiccjjjciiiiiiiiii");
 
         return "Patient Content.";
     }
