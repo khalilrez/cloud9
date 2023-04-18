@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -206,7 +207,15 @@ public class AuthController {
     public ResponseEntity<?> resetPasswordSMS (@RequestBody SmsNewPwd newPassword) {
         return userService.resetSMS(newPassword);
     }
+    @DeleteMapping ({"/delete/{userName}"})
+    public void delete(@PathVariable String userName){
+        userService.delete(userName);
+    }
 
+    @PutMapping  ({"/update"})
+    public void update(@RequestBody User user){
+        userService.update(user);
+    }
 
 
 

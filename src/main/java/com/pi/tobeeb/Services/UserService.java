@@ -119,4 +119,13 @@ public class UserService {
         }
         return ResponseEntity.ok(new MessageResponse(response));
     }
+
+    public void delete(String userName){
+        User u= repoUser.findByUsername(userName).orElse(null);
+        u.getRole().clear();
+        repoUser.delete(u);
+    }
+    public void update(User user){
+        repoUser.save(user);
+    }
 }

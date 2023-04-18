@@ -17,6 +17,7 @@ public class JwtUtils {
 
 
     private String jwtSecret="bezKoderSecretKey";
+
     byte[] keyBytes = Keys.secretKeyFor(SignatureAlgorithm.HS512).getEncoded();
 
 
