@@ -1,23 +1,35 @@
 package com.pi.tobeeb.Entities;
+
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-import java.util.Date;
-import org.springframework.data.annotation.Id;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
 @Getter
 @Setter
-@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
+
 public class Message {
     @Id
-    private String id;
-    private String chatId;
-    private String senderId;
-    private String recipientId;
-    private String senderName;
-    private String recipientName;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    private User sender;
+
+    @ManyToOne
+    private User recipient;
+
+    @Column(nullable = false)
     private String content;
-    private Date timestamp;
+
+    @Column(nullable = false)
+    private LocalDateTime sentAt;
+
     private MessageStatus status;
 }
