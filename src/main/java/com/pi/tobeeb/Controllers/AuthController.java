@@ -97,14 +97,13 @@ public class AuthController {
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
 
-        Set<String> strRoles = signUpRequest.getRole();
+        Set<String> strRoles =  signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
         logger.error("iiiiiicccciiiiiiiiii");
 
         logger.error(String.valueOf(strRoles));
 
         if (strRoles == null) {
-
             Role userRole = roleRepository.findByName(ERole.ROLE_PATIENT)
 
                     .orElseThrow(() -> new RuntimeException("Error: Role5 is not found."));
@@ -126,19 +125,26 @@ public class AuthController {
 
                         break;
                     default:
-
+                        System.out.println(ERole.ROLE_PHARMACY);
                         Role userRole = roleRepository.findByName(ERole.ROLE_PHARMACY)
                                 .orElseThrow(() -> new RuntimeException("Error: Role1 is not found."));
                         roles.add(userRole);
                 }
             });
         }
-
-        user.setRoles(roles);
+        /*Set<ERole> roles =  signUpRequest.getRole();
+        Set<Role> valid_roles = new HashSet<Role>(){
+        };
+        roles.forEach(role -> {
+            Role userRole = roleRepository.findByName(role).orElseThrow(() -> new RuntimeException("Error: Role invalid."));
+            valid_roles.add(userRole);
+        });
+        user.setRoles(valid_roles);*/
         userRepository.save(user);
-        emailService.sendVerificationEmail(user);
+        //emailService.sendVerificationEmail(user);
         UserVerificationToken verificationToken = verificationTokenService.createVerificationToken(user); // création du jeton de vérification
         verificationTokenService.saveVerificationToken(verificationToken);
+        System.out.println(verificationToken.toString());
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }

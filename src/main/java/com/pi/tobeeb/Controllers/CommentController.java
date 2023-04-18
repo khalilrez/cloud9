@@ -2,14 +2,17 @@ package com.pi.tobeeb.Controllers;
 import com.pi.tobeeb.Entities.Comment;
 import com.pi.tobeeb.Entities.Post;
 import com.pi.tobeeb.Entities.Reaction;
+import com.pi.tobeeb.Entities.User;
 import com.pi.tobeeb.Repositorys.CommentRepository;
 import com.pi.tobeeb.Repositorys.PostRepository;
+import com.pi.tobeeb.Repositorys.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.util.Set;
 
 
 @RestController
@@ -21,6 +24,9 @@ public class CommentController {
 
     @Autowired
     PostRepository postRepo;
+
+    @Autowired
+    UserRepository userRepo;
 
 
 
@@ -35,15 +41,12 @@ public class CommentController {
     }
     */
     @RequestMapping(value="/create/{post_id}",method = RequestMethod.POST)
-    public ResponseEntity<Comment> createComment(@RequestBody Comment commentRequest, @PathVariable(value = "post_id") Long postId){
+    public ResponseEntity<Comment> createComment(@RequestBody Comment commentRequest, @PathVariable(value = "post_id") Long postId, @RequestParam("userid") Long userid){
+        User user = userRepo.findById(userid).orElse(null);
         Post post = postRepo.findById(postId).orElse(null);
         if(post!=null ){
-            /*
-            commentRequest.setUser(user);
- */
-
-
         commentRequest.setPost(post);
+        commentRequest.setUser(user);
         commentRequest.setDateComment(new Date((new java.util.Date()).getTime()));
         repo.save(commentRequest);
         return new ResponseEntity<>(commentRequest, HttpStatus.CREATED);}
@@ -75,6 +78,13 @@ public class CommentController {
     }
 
 
-///////////////////////////////comment/////////////////
+///////////////////////////////user/////////////////
+
+    @RequestMapping(value="/byuser" ,method = RequestMethod.GET)
+    public Set<Comment> getCommentsByUser(@RequestParam("iduser") Long iduser){
+
+        return repo.findCommentsByUser(iduser);
+    }
+
 
 }

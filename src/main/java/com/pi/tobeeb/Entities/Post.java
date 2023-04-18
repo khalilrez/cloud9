@@ -32,11 +32,16 @@ public class Post {
 /*    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 */
-/*
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user", referencedColumnName = "id_user")
+    @JoinColumn(name = "user_id")
     private User user;
 
+    public Post(Long idPost, String namePost, String contentPost) {
+        this.idPost = idPost;
+        this.namePost = namePost;
+        this.contentPost = contentPost;
+    }
 
     public User getUser() {
         return user;
@@ -44,7 +49,7 @@ public class Post {
 
     public void setUser(User user) {
         this.user = user;
-    }*/
+    }
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Reaction> reactions;

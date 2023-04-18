@@ -15,7 +15,14 @@ public class Reaction {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post", referencedColumnName = "id_post")
     private Post post;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
+
+    public User getUser() {
+        return user;
+    }
 
     public Long getIdReaction() {
         return idReaction;
@@ -39,5 +46,11 @@ public class Reaction {
 
     public void setPost(Post post) {
         this.post = post;
+
+    }
+    public void setUser(User user) {
+        this.user =user;
+
+
     }
 }

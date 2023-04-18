@@ -52,14 +52,16 @@ public class User  {
                  @JoinColumn(name = "id_Role")
          }
  )
+
  private Set<Role> role = new HashSet<>();
+ /*
  @JsonIgnore
  @OneToMany(cascade = CascadeType.ALL, mappedBy ="patient")
  private Set<Appointment> appointment;
 
  @OneToMany(cascade = CascadeType.ALL, mappedBy ="user")
  private Set<Reclamation> reclamation;
-
+*/
 
 
  public User(String username, String email, String password) {

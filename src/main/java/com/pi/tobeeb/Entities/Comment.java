@@ -21,11 +21,14 @@ public class Comment {
     @Column(name = "date_comment", nullable = false)
     private Date dateComment;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     @JoinColumn(name = "id_post")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Post post;
 
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
+    private User user;
 
    /* @ManyToOne
     @JoinColumn(name = "idUser")
@@ -36,6 +39,11 @@ public class Comment {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
+*/
+
+    public Comment(String content) {
+        this.content = content;
+    }
 
     public User getUser() {
         return user;
@@ -44,7 +52,7 @@ public class Comment {
     public void setUser(User user) {
         this.user = user;
     }
-*/
+
     public Comment() {
 
     }
@@ -82,6 +90,18 @@ public class Comment {
                 "idComment=" + idComment +
                 ", content='" + content + '\'' +
                 '}';
+    }
+
+    public Comment(Long idComment, String content, Date dateComment, Post post, User user) {
+        this.idComment = idComment;
+        this.content = content;
+        this.dateComment = dateComment;
+        this.post = post;
+        this.user = user;
+    }
+
+    public Comment(Post post) {
+        this.post = post;
     }
 
     public Comment(Long idComment) {

@@ -1,5 +1,8 @@
 package com.pi.tobeeb.Entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@JsonFormat(shape = JsonFormat.Shape.STRING)
 public enum ERole {
 
     ROLE_PATIENT,
