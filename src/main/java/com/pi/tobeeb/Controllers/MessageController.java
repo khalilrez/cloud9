@@ -110,8 +110,8 @@ public class MessageController
     }
 
 
-    @MessageMapping ("/message")
 
+   @MessageMapping ("/message")
     @SendTo("/topic/return-to")
     public Message getContent(@RequestBody Message message){
         //  try
