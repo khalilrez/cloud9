@@ -208,11 +208,15 @@ public class AuthController {
         return userService.resetSMS(newPassword);
     }
     @DeleteMapping ({"/delete/{userName}"})
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+
     public void delete(@PathVariable String userName){
         userService.delete(userName);
     }
 
     @PutMapping  ({"/update"})
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+
     public void update(@RequestBody User user){
         userService.update(user);
     }

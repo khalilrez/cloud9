@@ -1,10 +1,11 @@
 package com.pi.tobeeb.Jwt;
 import com.pi.tobeeb.Security.UserDetailsImp;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import java.security.Key;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import java.util.Date;
@@ -16,7 +17,7 @@ public class JwtUtils {
 
 
 
-    private String jwtSecret="bezKoderSecretKey";
+    private String jwtSecret="404E635266556A586E327235753878233EEEEDBBBLL00F413F4428472B4B6250645334GGGG66668KJNFDE67067566B5970";
 
     byte[] keyBytes = Keys.secretKeyFor(SignatureAlgorithm.HS512).getEncoded();
 
@@ -30,14 +31,17 @@ public class JwtUtils {
                 .setSubject((userPrincipal.getUsername()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(SignatureAlgorithm.HS512, keyBytes)
+                .signWith(SignatureAlgorithm.HS512, getSignInKey())
                 .compact();
     }
 
     public String getUserNameFromJwtToken(String token) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
-
+    private Key getSignInKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
     public boolean validateJwtToken(String authToken) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
