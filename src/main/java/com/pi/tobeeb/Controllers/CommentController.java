@@ -6,6 +6,7 @@ import com.pi.tobeeb.Entities.User;
 import com.pi.tobeeb.Repositorys.CommentRepository;
 import com.pi.tobeeb.Repositorys.PostRepository;
 import com.pi.tobeeb.Repositorys.UserRepository;
+import com.pi.tobeeb.Utils.BadWordFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,18 +29,6 @@ public class CommentController {
     @Autowired
     UserRepository userRepo;
 
-
-
-/*
-    @RequestMapping(value="/post",method = RequestMethod.GET)
-    public String helloWorld(@RequestParam(name = "sofien") String name, @RequestParam(name = "hedi") String lastname){
-        return "\nHello World from Spring Boot"+ name + lastname;
-    }
-    @RequestMapping(value="/post",method = RequestMethod.POST)
-    public String helloWorldPost(@RequestBody Post post){
-        return "\nHello World from Spring Boot POST " + post.getNamePost();
-    }
-    */
     @RequestMapping(value="/create/{post_id}",method = RequestMethod.POST)
     public ResponseEntity<Comment> createComment(@RequestBody Comment commentRequest, @PathVariable(value = "post_id") Long postId, @RequestParam("userid") Long userid){
         User user = userRepo.findById(userid).orElse(null);
@@ -48,7 +37,11 @@ public class CommentController {
         commentRequest.setPost(post);
         commentRequest.setUser(user);
         commentRequest.setDateComment(new Date((new java.util.Date()).getTime()));
-        repo.save(commentRequest);
+
+            BadWordFilter.filter(commentRequest);
+
+            repo.save(commentRequest);
+
         return new ResponseEntity<>(commentRequest, HttpStatus.CREATED);}
         else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

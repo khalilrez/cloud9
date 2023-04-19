@@ -1,12 +1,17 @@
 package com.pi.tobeeb.Controllers;
 
-import com.pi.tobeeb.Entities.Comment;
 import com.pi.tobeeb.Entities.Post;
 import com.pi.tobeeb.Entities.User;
 import com.pi.tobeeb.Repositorys.PostRepository;
 import com.pi.tobeeb.Repositorys.UserRepository;
+import com.pi.tobeeb.Utils.BadWordFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import java.io.IOException;
 
 
 @RestController
@@ -19,11 +24,13 @@ public class PostController {
     UserRepository userRepo;
 
     @RequestMapping(value="/create",method = RequestMethod.POST)
-    public Post createPost(@RequestBody Post post, @RequestParam("userid") Long userid){
+    public Post createPost(@RequestBody Post post, @RequestParam("userid") Long userid) {
         User user = userRepo.findById(userid).orElseThrow(() -> new RuntimeException("User not found"));
         post.setUser(user);
-    return repo.save(post);
+        BadWordFilter.filter(post);
+        return repo.save(post);
     }
+
     @RequestMapping(value="/edit",method = RequestMethod.POST)
     public Post editPost(@RequestBody Post new_post){
         Post old_post = repo.findById(new_post.getIdPost()).get();
@@ -31,11 +38,7 @@ public class PostController {
         old_post.setNamePost(new_post.getNamePost());
         return repo.save(old_post);
     }
-    /*
-    @RequestMapping(value="/remove",method = RequestMethod.DELETE)
-    public void removePost(@RequestBody Post post){
-       repo.delete(post);
-    }*/
+
     @RequestMapping(value="/remove",method = RequestMethod.DELETE)
     public void removePost(@RequestParam("id") Long postid)
     { Post post = repo.findById(postid).orElse(null);
