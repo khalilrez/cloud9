@@ -12,6 +12,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -60,5 +62,14 @@ public class PostController {
         return repo.findPostsByUser(iduser);
     }
 
-
+    @GetMapping("/sorted-by-reactions")
+    public List<Post> getPostsSortedByReactions() {
+        List<Object[]> postsAndReactions = repo.findPostsOrderByReactionsDesc();
+        List<Post> sortedPosts = new ArrayList<>();
+        for (Object[] postAndReaction : postsAndReactions) {
+            Post post = (Post) postAndReaction[0];
+            sortedPosts.add(post);
+        }
+        return sortedPosts;
+    }
 }

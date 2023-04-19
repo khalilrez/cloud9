@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -16,5 +17,9 @@ public interface PostRepository extends CrudRepository<Post, Long> {
     Optional<Post> findByIdWithComments(@Param("id") Long id);*/
     @Query(" SELECT new com.pi.tobeeb.Entities.Post(p.idPost,p.namePost, p.contentPost) FROM Post p LEFT JOIN p.user u WHERE u.idUser = :iduser")
     Set<Post> findPostsByUser(@Param("iduser") Long iduser);
+    @Query("SELECT p, COUNT(r) as reaction_count FROM Post p LEFT JOIN p.reactions r GROUP BY p ORDER BY reaction_count DESC")
+    List<Object[]> findPostsOrderByReactionsDesc();
 
     }
+
+
