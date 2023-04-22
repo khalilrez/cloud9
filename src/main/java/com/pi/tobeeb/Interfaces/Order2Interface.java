@@ -10,6 +10,5 @@ public interface Order2Interface {
     public Order2 createOrder(Order2 order);
     public Order2 updateOrder(int id, Order2 updatedOrder);
     public void deleteOrder(int id);
-
 }
 

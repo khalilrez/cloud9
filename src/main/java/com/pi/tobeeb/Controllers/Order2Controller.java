@@ -3,7 +3,6 @@ package com.pi.tobeeb.Controllers;
 import com.pi.tobeeb.Entities.Order2;
 import com.pi.tobeeb.Services.Order2Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,5 +39,9 @@ public class Order2Controller {
     public String  deleteOrder(@PathVariable int id) {
         order2Service.deleteOrder(id);
         return "order deleted succefully";
+    }
+    @GetMapping("/search/{searchTerm}")
+    public List<Order2> searchOrders(@PathVariable("searchTerm") String searchTerm) {
+        return order2Service.search(searchTerm);
     }
 }

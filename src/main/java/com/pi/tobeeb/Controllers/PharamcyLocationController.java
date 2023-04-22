@@ -47,4 +47,11 @@ public class PharamcyLocationController {
         modelAndView.setViewName("location");
         return  ("location");
     }
+
+    @GetMapping("/search/{searchTerm}")
+    public List<PharmacyLocation> searchOrders(@PathVariable("searchTerm") String searchTerm) {
+        return  pharamciservice.search(searchTerm);
+    }
+
+
 }
