@@ -1,6 +1,7 @@
 package com.pi.tobeeb.Controllers;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,8 @@ import com.pi.tobeeb.Services.EmailService;
 import com.pi.tobeeb.Services.UserService;
 import com.pi.tobeeb.Services.VerificationTokenService;
 import com.pi.tobeeb.Utils.CodeUtils;
+import com.pi.tobeeb.Entities.User;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,25 +62,29 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        logger.error("hneeeee");
+        if (userService.isValid(loginRequest.getUsername()) == true) {
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        logger.error("hneeeee333");
+            String jwt = jwtUtils.generateJwtToken(authentication);
 
+            UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(item -> item.getAuthority())
+                    .collect(Collectors.toList());
 
-        String jwt = jwtUtils.generateJwtToken(authentication);
+            return ResponseEntity.ok(new JwtResponse(jwt,
+                    userDetails.getUser().getIdUser(), userDetails.getUsername(),
+                    userDetails.getUser().getEmail(), roles));
+        } else
 
-        UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getUser().getIdUser(), userDetails.getUsername(),
-                userDetails.getUser().getEmail(), roles));
+        return ResponseEntity
+                .badRequest()
+                .body(new MessageResponse("Account is  not verified!"));
     }
+
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SingupRequest signUpRequest) {

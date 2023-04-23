@@ -1,5 +1,6 @@
 package com.pi.tobeeb.Services;
 
+import com.pi.tobeeb.Controllers.AuthController;
 import com.pi.tobeeb.Entities.ResetToken;
 import com.pi.tobeeb.Entities.User;
 import com.pi.tobeeb.Payload.request.SmsNewPwd;
@@ -9,6 +10,8 @@ import com.pi.tobeeb.Repositorys.ResetTokenRepository;
 import com.pi.tobeeb.Repositorys.UserRepository;
 import com.pi.tobeeb.Utils.CodeUtils;
 import com.pi.tobeeb.Utils.SmsConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,8 @@ import java.util.*;
 
 @Service
 public class UserService {
+    private Logger logger = LoggerFactory.getLogger(UserService.class);
+
     @Autowired
     private UserRepository repoUser;
     @Autowired
@@ -126,6 +131,19 @@ public class UserService {
         repoUser.delete(u);
     }
     public void update(User user){
+        logger.info(user.getRoles().toString());
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         repoUser.save(user);
+    }
+
+
+    public Boolean isValid(String username){
+        User user = repoUser.findByUsername(username).get();
+        if(user.getIsverified() == 1) {
+            return true;
+        }
+            return false;
+
     }
 }

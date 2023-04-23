@@ -1,6 +1,7 @@
 package com.pi.tobeeb.Jwt;
 import com.pi.tobeeb.Security.UserDetailsImp;
 import io.jsonwebtoken.*;
+import com.pi.tobeeb.Entities.User;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import java.security.Key;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import java.util.Date;
+import java.util.Map;
 
 @Component
 public class JwtUtils {
@@ -16,21 +18,22 @@ public class JwtUtils {
 
 
 
-
     private String jwtSecret="404E635266556A586E327235753878233EEEEDBBBLL00F413F4428472B4B6250645334GGGG66668KJNFDE67067566B5970";
 
-    byte[] keyBytes = Keys.secretKeyFor(SignatureAlgorithm.HS512).getEncoded();
+    //byte[] keyBytes = Keys.secretKeyFor(SignatureAlgorithm.HS512).getEncoded();
 
 
-    private int jwtExpirationMs = 3600 * 5;
+    private int jwtExpirationMs = 86400000;
     public String generateJwtToken(Authentication authentication) {
 
         UserDetailsImp userPrincipal = (UserDetailsImp) authentication.getPrincipal();
 
+         ;
         return Jwts.builder()
+                .claim("roles",userPrincipal.getAuthorities().toString())
                 .setSubject((userPrincipal.getUsername()))
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                 .signWith(SignatureAlgorithm.HS512, getSignInKey())
                 .compact();
     }
