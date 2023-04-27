@@ -3,6 +3,8 @@ package com.pi.tobeeb.Entities;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,28 +22,39 @@ public class Post {
 
     @Column(name = "content_post", nullable = false)
     private String contentPost;
-/*
-    @ManyToOne
-    @JoinColumn(name = "idUser")
-    private User user;*/
-
-    /*@Column(name = "date_post", nullable = true)
-    private Date datePost;*/
 
 
-/*    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
-*/
+    @Column(name = "imageUrl", nullable = false)
+    private String imageUrl;
+
+
+    @Column(name = "created_at",nullable = false)
+    private java.sql.Timestamp createdAt;
+
+
+   @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+   private List<Reaction> reactions;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+    private double sentimentScore;
+
 
     public Post(Long idPost, String namePost, String contentPost) {
         this.idPost = idPost;
         this.namePost = namePost;
         this.contentPost = contentPost;
     }
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+
 
     public User getUser() {
         return user;
@@ -51,8 +64,6 @@ public class Post {
         this.user = user;
     }
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<Reaction> reactions;
 
     // constructors, getters, and setters
     public Post() {
@@ -86,4 +97,19 @@ public class Post {
     public void setContentPost(String contentPost) {
         this.contentPost = contentPost;
     }
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void setSentimentScore(double averageSentiment) {
+    }
+
+    public double getSentimentScore() {
+        return sentimentScore;
+    }
+
 }

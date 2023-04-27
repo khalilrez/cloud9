@@ -20,6 +20,8 @@ public interface PostRepository extends CrudRepository<Post, Long> {
     @Query("SELECT p, COUNT(r) as reaction_count FROM Post p LEFT JOIN p.reactions r GROUP BY p ORDER BY reaction_count DESC")
     List<Object[]> findPostsOrderByReactionsDesc();
 
+    List<Post> findByNamePostContainingOrContentPostContaining(String namePost, String contentPost);
+
     }
 
 

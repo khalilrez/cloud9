@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Set;
 
 
@@ -37,7 +38,8 @@ public class CommentController {
         commentRequest.setPost(post);
         commentRequest.setUser(user);
         commentRequest.setDateComment(new Date((new java.util.Date()).getTime()));
-
+            Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+            commentRequest.setCreatedAt(currentTimestamp);
             BadWordFilter.filter(commentRequest);
 
             repo.save(commentRequest);

@@ -5,6 +5,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name= "comments")
@@ -20,6 +21,11 @@ public class Comment {
 
     @Column(name = "date_comment", nullable = false)
     private Date dateComment;
+
+
+
+    @Column(name = "created_at",nullable = false)
+    private java.sql.Timestamp createdAt;
 
     @ManyToOne()
     @JoinColumn(name = "id_post")
@@ -64,6 +70,13 @@ public class Comment {
         this.post = post;
     }
 
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
     public Date getDateComment() {
         return dateComment;
     }
