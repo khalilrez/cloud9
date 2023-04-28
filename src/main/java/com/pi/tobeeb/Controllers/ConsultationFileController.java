@@ -21,8 +21,8 @@ public class ConsultationFileController {
     @Autowired
     private ConsultationFileService consultationFileService;
 
-    @GetMapping("/{id}/test/{testId}")
-    public ResponseEntity<byte[]> getTestImage(@PathVariable Long id, @PathVariable Long testId) throws IOException {
+    @GetMapping("/test/{testId}")
+    public ResponseEntity<byte[]> getTestImage(@PathVariable Long testId) throws IOException {
         byte[] imageBytes = consultationFileService.getTestImage(testId);
         if (imageBytes != null) {
             HttpHeaders headers = new HttpHeaders();
@@ -33,8 +33,17 @@ public class ConsultationFileController {
         }
     }
 
-    @PostMapping("/{id}/test")
-    public ResponseEntity<Test> addNewTestToConsultationFile(@PathVariable Long id, @RequestParam String testName) {
+    @GetMapping("/test/{id}")
+    public ResponseEntity<Test> getTestById(@PathVariable(value = "id") Long testId) {
+        Test test = consultationFileService.getTestById(testId);
+        if (test == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(test);
+    }
+
+    @PostMapping("/add-test")
+    public ResponseEntity<Test> addNewTestToConsultationFile(@RequestBody Long id, @RequestBody String testName) {
         Test test = consultationFileService.addNewTestToConsultationFile(testName, id);
         return new ResponseEntity<>(test, HttpStatus.CREATED);
     }
@@ -51,7 +60,7 @@ public class ConsultationFileController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{id}/test/image")
+    @PostMapping("/test/{id}/image")
     public ResponseEntity<?> addImageToTest(@PathVariable Long id, @RequestParam("file") MultipartFile image) throws IOException {
         consultationFileService.addImageToTest(id, image);
         return ResponseEntity.noContent().build();
