@@ -21,7 +21,6 @@ public class Appointment implements Serializable {
     private Long idAppointment;
     private TypeAppointment Type;
     private LocalDate dateStart;
-    private LocalDate dateEnd;
 
     @JsonIgnore
     @ManyToOne
@@ -30,5 +29,11 @@ public class Appointment implements Serializable {
     @JsonIgnore
     @ManyToOne
     User doctor;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "consultation_file_id")
+    private ConsultationFile consultationFile;
+
+
 
 }

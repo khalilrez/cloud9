@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,5 +19,15 @@ public class ConsultationFile implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idFile;
     private String doctorNotes;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "prescription_id")
+    private Prescription prescription;
+
+    @OneToMany(mappedBy = "file")
+    private List<Test> test;
+
+    @OneToOne(mappedBy = "consultationFile", cascade = CascadeType.ALL)
+    private Appointment appointment;
 
 }
