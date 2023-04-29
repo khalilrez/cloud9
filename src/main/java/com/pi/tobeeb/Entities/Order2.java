@@ -26,6 +26,8 @@ public class Order2 implements Serializable {
     @JsonIgnore
     @ManyToOne
     private Delivery delivery;
-
+    @JsonIgnore
+    @ManyToOne
+    User user;
 
 }
