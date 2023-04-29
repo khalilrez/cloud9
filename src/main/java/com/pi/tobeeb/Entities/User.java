@@ -36,4 +36,7 @@ public class User implements Serializable {
  @OneToMany(cascade = CascadeType.ALL, mappedBy ="user")
  private Set<Reclamation> reclamation;
 
+ @OneToMany(cascade = CascadeType.ALL, mappedBy ="user")
+ private Set<Order2> order2s;
+
 }
