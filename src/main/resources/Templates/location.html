@@ -75,7 +75,7 @@
                 var marker = new mapboxgl.Marker()
                     .setLngLat([location.altitude, location.amplitude])
                     .setPopup(new mapboxgl.Popup({ offset: 25 })
-                        .setHTML('<h3>' + location.name + '</h3><p>' ))
+                        .setHTML('<h3>' + location.name + '</h3>   <p>' ))
                     .addTo(map);
             });
             navigator.geolocation.getCurrentPosition(function(position) {
@@ -112,7 +112,8 @@
         var marker = new mapboxgl.Marker()
             .setLngLat([location.amplitude, location.altitude])
             .setPopup(new mapboxgl.Popup({ offset: 25 })
-                .setHTML('<h3>' + location.name + '</h3><p>' ))
+                .setHTML('<h3>' + location.name + '</h3><p>'))
+
             .addTo(map);
 
         marker.getElement().addEventListener('click', function() {

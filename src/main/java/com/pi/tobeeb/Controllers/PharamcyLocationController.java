@@ -49,7 +49,7 @@ public class PharamcyLocationController {
     }
 
     @GetMapping("/search/{searchTerm}")
-    public List<PharmacyLocation> searchOrders(@PathVariable("searchTerm") String searchTerm) {
+    public List<PharmacyLocation> searchPharmacy(@PathVariable("searchTerm") String searchTerm) {
         return  pharamciservice.search(searchTerm);
     }
 

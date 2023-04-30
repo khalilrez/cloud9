@@ -13,6 +13,6 @@ import java.util.List;
 public interface PharmacyLocationRepository extends JpaRepository<PharmacyLocation, Integer> {
 
 
-    @Query("SELECT pl FROM PharmacyLocation pl WHERE pl.name LIKE %:searchTerm%")
+    @Query("SELECT pl FROM PharmacyLocation pl WHERE pl.name  LIKE %:searchTerm% OR pl.type LIKE %:searchTerm% ")
     public List<PharmacyLocation> search(@Param("searchTerm") String searchTerm);
 }

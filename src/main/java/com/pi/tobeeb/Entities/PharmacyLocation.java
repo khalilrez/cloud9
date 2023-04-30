@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -23,4 +20,7 @@ public class PharmacyLocation implements Serializable {
     private String name;
     private float amplitude;
     private float altitude;
+    private int tel ;
+    private String type;
+    private String address;
 }
