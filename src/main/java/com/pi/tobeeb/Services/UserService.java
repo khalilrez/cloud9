@@ -5,6 +5,7 @@ import com.pi.tobeeb.Entities.ERole;
 import com.pi.tobeeb.Entities.ResetToken;
 import com.pi.tobeeb.Entities.Role;
 import com.pi.tobeeb.Entities.User;
+import com.pi.tobeeb.Payload.request.ChangePasswordRequest;
 import com.pi.tobeeb.Payload.request.SmsNewPwd;
 import com.pi.tobeeb.Payload.request.SmsRest;
 import com.pi.tobeeb.Payload.response.MessageResponse;
@@ -222,6 +223,24 @@ public class UserService {
         return false;
 
 }
+
+
+    public Integer changePassword(Long id, ChangePasswordRequest password) {
+        User user = repoUser.findByIdUser(id);
+        if (user == null) {
+           return 404;
+        }
+        logger.info(password.getNewpassword());
+        if(passwordEncoder.matches(password.getOldpassword(), user.getPassword())){
+            user.setPassword(passwordEncoder.encode(password.getNewpassword()));
+            repoUser.save(user);
+            return 200;
+        }
+        else {
+            return 400;
+        }
+    }
+
 
 
 }

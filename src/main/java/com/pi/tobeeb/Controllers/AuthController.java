@@ -11,6 +11,7 @@ import com.pi.tobeeb.Jwt.JwtUtils;
 import com.pi.tobeeb.Payload.request.*;
 import com.pi.tobeeb.Payload.response.JwtResponse;
 import com.pi.tobeeb.Payload.response.MessageResponse;
+import com.pi.tobeeb.Payload.response.ResponseType;
 import com.pi.tobeeb.Repositorys.RoleRepository;
 import com.pi.tobeeb.Repositorys.UserRepository;
 import com.pi.tobeeb.Security.UserDetailsImp;
@@ -106,7 +107,8 @@ public class AuthController {
 
                         return ResponseEntity.ok(new JwtResponse(jwt,
                                 userDetails.getUser().getIdUser(), userDetails.getUsername(),
-                                userDetails.getUser().getEmail(), roles));
+                                userDetails.getUser().getEmail(),roles,userDetails.getUser().getImageProfile()));
+
                     }
                     return ResponseEntity
                             .badRequest()
@@ -288,6 +290,12 @@ public class AuthController {
         return ResponseEntity.ok(updatedUser);
     }
 
+    @PutMapping("/changepassword/{id}")
+    public ResponseType changePassword(@PathVariable Long id, @RequestBody ChangePasswordRequest password) {
+       Integer code = userService.changePassword(id, password);
+        return new ResponseType(code);
+    }
+    }
 
 
-}
+
