@@ -12,6 +12,6 @@ import java.util.List;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message,Long> {
-    @Query (value= "SELECT * FROM `messages` where `conversation_id` = :idconver order by date ASC", nativeQuery =true)
-    List<Message> getMessageByConvId(@Param("idconver")Long idconver);
+	@Query (value= "SELECT * FROM `messages` where `conversation_id` = :idconver order by date ASC", nativeQuery =true)
+	 List<Message> getMessageByConvId(@Param("idconver")Long idconver);
 }

@@ -14,85 +14,85 @@ import java.util.Date;
 @Entity
 @Table(name = "messages")
 public class Message {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     private String text;
-
+    
     private Date date;
     @ManyToOne
     @JoinColumn(name = "conversation_id")
     private Conversation conversation;
-
+    
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
+    
     private String file;
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getText() {
-        return text;
-    }
+	public String getText() {
+		return text;
+	}
 
-    public void setText(String text) {
-        this.text = text;
-    }
-    @JsonIgnore
-    public Conversation getConversation() {
-        return conversation;
-    }
+	public void setText(String text) {
+		this.text = text;
+	}
+	@JsonIgnore
+	public Conversation getConversation() {
+		return conversation;
+	}
 
-    public void setConversation(Conversation conversation) {
-        this.conversation = conversation;
-    }
+	public void setConversation(Conversation conversation) {
+		this.conversation = conversation;
+	}
 
-    public User getUser() {
-        return user;
-    }
+	public User getUser() {
+		return user;
+	}
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+	public void setUser(User user) {
+		this.user = user;
+	}
 
-    public String getFile() {
-        return file;
-    }
+	public String getFile() {
+		return file;
+	}
 
-    public void setFile(String file) {
-        this.file = file;
-    }
+	public void setFile(String file) {
+		this.file = file;
+	}
 
-    public Date getDate() {
-        return date;
-    }
+	public Date getDate() {
+		return date;
+	}
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
+	public void setDate(Date date) {
+		this.date = date;
+	}
 
-    public Message() {
-        super();
-    }
+	public Message() {
+		super();
+	}
 
-    public Message(Long id, String text, Date date, Conversation conversation, User user, String file) {
-        super();
-        this.id = id;
-        this.text = text;
-        this.date = date;
-        this.conversation = conversation;
-        this.user = user;
-        this.file = file;
-    }
-
-
+	public Message(Long id, String text, Date date, Conversation conversation, User user, String file) {
+		super();
+		this.id = id;
+		this.text = text;
+		this.date = date;
+		this.conversation = conversation;
+		this.user = user;
+		this.file = file;
+	}
+    
+    
 }

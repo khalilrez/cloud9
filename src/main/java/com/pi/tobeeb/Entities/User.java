@@ -10,11 +10,9 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Getter
 @Setter
-@NoArgsConstructor
+//@NoArgsConstructor
 @AllArgsConstructor
-@Data
 @Table(	name = "user",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "username"),
@@ -60,8 +58,13 @@ public class User  {
  @OneToMany(cascade = CascadeType.ALL, mappedBy ="user")
  private Set<Reclamation> reclamation;
 
+ @OneToMany(mappedBy = "user1", cascade = CascadeType.ALL, orphanRemoval = true)
+ private Set<Conversation> conversationAsUser1 = new HashSet<>();
 
+ @OneToMany(mappedBy = "user2", cascade = CascadeType.ALL, orphanRemoval = true)
+ private Set<Conversation> conversationAsUser2 = new HashSet<>();
 
+ 
  public User(String username, String email, String password) {
   this.username = username;
   this.email = email;
@@ -122,4 +125,17 @@ public class User  {
  public void setIsverified(int isverified) {
   this.isverified = isverified;
  }
+
+public Long getIdUser() {
+	return idUser;
+}
+
+public void setIdUser(Long idUser) {
+	this.idUser = idUser;
+}
+
+public User() {
+	super();
+}
+
 }
