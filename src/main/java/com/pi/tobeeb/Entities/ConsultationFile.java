@@ -1,4 +1,5 @@
 package com.pi.tobeeb.Entities;
+import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,9 +26,11 @@ public class ConsultationFile implements Serializable {
     private Prescription prescription;
 
     @OneToMany(mappedBy = "file")
+    @JsonIgnore
     private List<Test> test;
 
     @OneToOne(mappedBy = "consultationFile", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Appointment appointment;
 
 }

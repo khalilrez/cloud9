@@ -1,24 +1,56 @@
 package com.pi.tobeeb.Controllers;
 
 import com.pi.tobeeb.Entities.Appointment;
+import com.pi.tobeeb.Payload.appointments.CreateAppointmentRequest;
+import com.pi.tobeeb.Repositorys.AppointmentRepository;
 import com.pi.tobeeb.Services.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
 @RestController
 @RequestMapping("api/appointments")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AppointmentController {
     @Autowired
     private AppointmentService appointmentService;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
+
+
+    @GetMapping("/api/appointments")
+    public ResponseEntity<List<Appointment>> getAppointments(@RequestParam("date") String dateStr) {
+
+        LocalDate date = LocalDate.parse(dateStr);
+
+        List<Appointment> appointments = appointmentRepository.findAllByDateStart(date);
+
+        return new ResponseEntity<>(appointments,HttpStatus.OK);
+    }
+
     @PostMapping("")
-    public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointment, @RequestBody Long patientId,@RequestBody Long doctorId) {
-        Appointment createdAppointment = appointmentService.createAppointment(patientId,doctorId,appointment);
+    public ResponseEntity<Appointment> createAppointment(@RequestBody CreateAppointmentRequest createAppointmentRequest) {
+        Appointment createdAppointment = appointmentService.createAppointment(createAppointmentRequest.getPatientId(),createAppointmentRequest.getDoctorId(),createAppointmentRequest);
         return new ResponseEntity<>(createdAppointment, HttpStatus.CREATED);
+    }
+
+
+    @PostMapping("/cancel/{id}")
+    public ResponseEntity<Appointment> cancelAppointment(@PathVariable Long id ){
+        Appointment appointment = appointmentService.cancelAppointment(id);
+        return new ResponseEntity<>(appointment, HttpStatus.OK);
+    }
+
+    @PostMapping("/complete/{id}")
+    public ResponseEntity<Appointment> completeAppointment(@PathVariable Long id ){
+        Appointment appointment = appointmentService.completeAppointment(id);
+        return new ResponseEntity<>(appointment, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

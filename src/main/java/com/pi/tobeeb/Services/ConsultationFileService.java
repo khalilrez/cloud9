@@ -1,17 +1,13 @@
 package com.pi.tobeeb.Services;
 
-import com.pi.tobeeb.Entities.Appointment;
-import com.pi.tobeeb.Entities.ConsultationFile;
-import com.pi.tobeeb.Entities.Prescription;
-import com.pi.tobeeb.Entities.Test;
+import com.pi.tobeeb.Entities.*;
+import com.pi.tobeeb.Enums.AppointmentStatus;
 import com.pi.tobeeb.Exceptions.ResourceNotFoundException;
-import com.pi.tobeeb.Repositorys.AppointmentRepository;
-import com.pi.tobeeb.Repositorys.ConsultationFileRepository;
-import com.pi.tobeeb.Repositorys.PrescriptionRepository;
-import com.pi.tobeeb.Repositorys.TestRepository;
+import com.pi.tobeeb.Repositorys.*;
 import com.pi.tobeeb.Utils.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +18,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @Service
 public class ConsultationFileService {
@@ -38,18 +37,25 @@ public class ConsultationFileService {
      @Autowired
      private TestRepository testRepository;
 
+     @Autowired
+     private UserRepository userRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(ConsultationFileService.class);
+
+
     @Value("${app.upload.dir}")
     private String uploadDir;
 
     @Scheduled(fixedDelay = 24 * 60 * 60 * 1000) // run once per day
+    //@Scheduled(fixedRate = 5000) // 30 seconds = 30,000 milliseconds
     public void checkExpiredAppointments() {
         List<Appointment> expiredAppointments = appointmentRepository.findByDateStartLessThanEqual(LocalDate.now());
-
+        logger.info("IN SCHEDULED METHOD ( CONSULTATION FILE SERVICE");
         for (Appointment appointment : expiredAppointments) {
+            if(appointment.getStatus().equals(AppointmentStatus.COMPLETE) && appointment.getConsultationFile() == null){
             ConsultationFile consultationFile = new ConsultationFile();
             //CREATE PRESCRIPTION & SAVE
             Prescription prescription = new Prescription();
-            prescription.setConsultationFile(consultationFile);
             prescription.setCreationDate(LocalDate.now());
             prescriptionRepository.save(prescription);
 
@@ -57,6 +63,12 @@ public class ConsultationFileService {
             consultationFile.setAppointment(appointment);
             consultationFile.setPrescription(prescription);
             consultationFileRepository.save(consultationFile);
+
+            appointment.setConsultationFile(consultationFile);
+            appointmentRepository.save(appointment);
+            }
+
+
         }
     }
 
@@ -70,6 +82,13 @@ public class ConsultationFileService {
     }
     public Test getTestById(Long id) {
         return testRepository.findById(id).orElse(null);
+    }
+
+    public List<Test> getAllTestsByUserId(Long id){
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+        List<Test> tests = testRepository.findAllByFile_Appointment_Patient(user);
+        return tests;
+
     }
 
     public void deleteTestById(Long id) {
@@ -107,4 +126,15 @@ public class ConsultationFileService {
         return consultationFileRepository.findAll();
     }
 
+    public List<ConsultationFile> getConsultationFilesByUserId(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+        List<ConsultationFile> consultationFiles = consultationFileRepository.findAllByAppointment_Patient(user);
+        return consultationFiles;
+
+    }
+
+
+    public Prescription getPrescriptionById(Long id){
+        return prescriptionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Prescription", "id", id));
+    }
 }

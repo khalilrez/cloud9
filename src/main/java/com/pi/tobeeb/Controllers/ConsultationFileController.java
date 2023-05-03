@@ -1,6 +1,10 @@
 package com.pi.tobeeb.Controllers;
 
+import com.pi.tobeeb.Dto.ConsultationFileDTO;
+import com.pi.tobeeb.Dto.PrescriptionDTO;
+import com.pi.tobeeb.Dto.TestDTO;
 import com.pi.tobeeb.Entities.ConsultationFile;
+import com.pi.tobeeb.Entities.Prescription;
 import com.pi.tobeeb.Entities.Test;
 import com.pi.tobeeb.Services.ConsultationFileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +12,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,7 +27,9 @@ public class ConsultationFileController {
     @Autowired
     private ConsultationFileService consultationFileService;
 
-    @GetMapping("/test/{testId}")
+
+    //Get Image of Test , takes id of a "Test" as PathVariable  , Returns Byte[]
+    @GetMapping("/test/image/{testId}")
     public ResponseEntity<byte[]> getTestImage(@PathVariable Long testId) throws IOException {
         byte[] imageBytes = consultationFileService.getTestImage(testId);
         if (imageBytes != null) {
@@ -42,10 +50,13 @@ public class ConsultationFileController {
         return ResponseEntity.ok().body(test);
     }
 
-    @PostMapping("/add-test")
-    public ResponseEntity<Test> addNewTestToConsultationFile(@RequestBody Long id, @RequestBody String testName) {
+    @PostMapping("/{id}/add-test/{testName}")
+    public ResponseEntity<TestDTO> addNewTestToConsultationFile(@PathVariable Long id, @PathVariable("testName") String testName) {
         Test test = consultationFileService.addNewTestToConsultationFile(testName, id);
-        return new ResponseEntity<>(test, HttpStatus.CREATED);
+        TestDTO testDTO = new TestDTO();
+        testDTO.setIdTest(test.getIdTest());
+        testDTO.setTestName(test.getTestName());
+        return new ResponseEntity<>(testDTO, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/test/{id}")
@@ -67,13 +78,67 @@ public class ConsultationFileController {
     }
 
     @GetMapping("/appointment/{id}")
-    public ConsultationFile getConsultationFileByAppointment(@PathVariable Long id) {
-        return consultationFileService.getConsultationFileByAppointment(id);
+    public ResponseEntity<ConsultationFileDTO> getConsultationFileByAppointment(@PathVariable Long id) {
+        ConsultationFile consultationFile =  consultationFileService.getConsultationFileByAppointment(id);
+        ConsultationFileDTO consultationFileDTO = consultationFileModelToDTO(consultationFile);
+        return new ResponseEntity<>(consultationFileDTO,HttpStatus.OK);
+    }
+
+
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<ConsultationFileDTO>> getConsultationFilesByUserId(@PathVariable(value = "userId") Long id){
+        List<ConsultationFile> consultationFiles = consultationFileService.getConsultationFilesByUserId(id);
+        return new ResponseEntity<>(consultationFilesModelToDTO(consultationFiles), HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public List<ConsultationFile> getAllConsultationFiles() {
-        return consultationFileService.getAllConsultationFiles();
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
+    public ResponseEntity<List<ConsultationFileDTO>> getAllConsultationFiles() {
+        List<ConsultationFile> consultationFiles = consultationFileService.getAllConsultationFiles();
+        return new ResponseEntity<>(consultationFilesModelToDTO(consultationFiles), HttpStatus.OK);
+    }
+
+    @GetMapping("/prescription/{id}")
+    public ResponseEntity<PrescriptionDTO> getPrescriptionById(@PathVariable Long id){
+        PrescriptionDTO prescriptionDTO = new PrescriptionDTO();
+        Prescription prescription = consultationFileService.getPrescriptionById(id);
+        prescriptionDTO.setPrescriptionId(prescription.getIdPrescription());
+        prescriptionDTO.setContent(prescriptionDTO.getContent());
+        prescriptionDTO.setDate(prescription.getCreationDate());
+        return  new ResponseEntity<>(prescriptionDTO,HttpStatus.OK);
+    }
+
+    @GetMapping("/tests/{id}")
+    public ResponseEntity<List<TestDTO>> getAllTestsByUserId(@PathVariable Long id){
+            List<Test> tests = consultationFileService.getAllTestsByUserId(id);
+            List<TestDTO> testDTOS = new ArrayList<>();
+        for (Test test : tests) {
+            TestDTO testDTO = new TestDTO();
+            testDTO.setIdTest(test.getIdTest());
+            testDTO.setTestName(test.getTestName());
+            testDTOS.add(testDTO);
+        }
+        return new ResponseEntity<>(testDTOS,HttpStatus.OK);
+    }
+
+    private List<ConsultationFileDTO> consultationFilesModelToDTO(List<ConsultationFile> consultationFiles) {
+        List<ConsultationFileDTO> consultationFileDTOS = new ArrayList<>();
+        for (ConsultationFile consultationFile : consultationFiles) {
+            ConsultationFileDTO consultationFileDTO = consultationFileModelToDTO(consultationFile);
+            consultationFileDTOS.add(consultationFileDTO);
+        }
+        return consultationFileDTOS;
+    }
+
+    private ConsultationFileDTO consultationFileModelToDTO(ConsultationFile consultationFile) {
+        ConsultationFileDTO consultationFileDTO = new ConsultationFileDTO();
+        consultationFileDTO.setIdFile(consultationFile.getIdFile());
+        consultationFileDTO.setDoctorNotes(consultationFile.getDoctorNotes());
+        consultationFileDTO.setAppointmentId(consultationFile.getAppointment().getIdAppointment());
+        consultationFileDTO.setPrescriptionId(consultationFile.getPrescription().getIdPrescription());
+        consultationFileDTO.setAppointmentDate(consultationFile.getAppointment().getDateStart());
+        return  consultationFileDTO;
     }
 
 }

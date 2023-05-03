@@ -1,5 +1,7 @@
 package com.pi.tobeeb.Entities;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pi.tobeeb.Enums.AppointmentStatus;
 import com.pi.tobeeb.Enums.TypeAppointment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,9 +21,9 @@ public class Appointment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idAppointment;
-    private TypeAppointment Type;
+    private TypeAppointment type;
     private LocalDate dateStart;
-
+    private AppointmentStatus status;
     @JsonIgnore
     @ManyToOne
     User patient;
