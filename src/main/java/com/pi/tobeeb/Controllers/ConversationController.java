@@ -15,6 +15,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.pi.tobeeb.Entities.ProhibitedWord;
+import com.pi.tobeeb.Repositorys.ProhibitedWordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -56,7 +58,8 @@ public class ConversationController {
     
     @Autowired
     private UserRepository userRepository;
-    
+    @Autowired
+    private ProhibitedWordRepository prohibitedWordRepository;
     @Autowired
     private MessageRepository messageRepository;
     @Autowired
@@ -119,15 +122,17 @@ public class ConversationController {
 		 System.out.println(message.getText());
         // Check for prohibited words and replace with asterisks
         String text = message.getText();
-        String[] prohibitedWords = {"merde", "putain", "connard","connasse"};
-        for (String word : prohibitedWords) {
-            if (text.toLowerCase().contains(word.toLowerCase())) {
-                int wordLength = word.length();
+        List<ProhibitedWord> prohibitedWords = prohibitedWordRepository.findAll();
+
+        for (ProhibitedWord word : prohibitedWords) {
+            if (text.toLowerCase().contains(word.getWord().toLowerCase())) {
+                int wordLength = word.getWord().length();
                 StringBuilder asterisks = new StringBuilder();
                 for (int i = 0; i < wordLength; i++) {
                     asterisks.append("*");
                 }
-                text = text.replaceAll("(?i)" + word, asterisks.toString());
+                text = text.replaceAll("(?i)" + word.getWord(), asterisks.toString());
+
             }
         }
 
