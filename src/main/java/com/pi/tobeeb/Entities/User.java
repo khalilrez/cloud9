@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,13 +31,47 @@ public class User  {
  private String password;
  private String phonenumber;
  //private String Location;
- private String picture;
+ @Column(name = "imageProfile",columnDefinition = "longtext")
+
+ private String imageProfile;
  private String verificationToken;
  private int isverified;
  private String userCode;
+ @Column(name = "account_non_locked")
+ private boolean accountNonLocked= true;
+
+ @Column(name = "failed_attempt")
+ private int failedAttempt;
+
+ @Column(name = "lock_time")
+ private Date lockTime;
 
  public String getUserCode() {
   return userCode;
+ }
+
+ public boolean isAccountNonLocked() {
+  return accountNonLocked;
+ }
+
+ public void setAccountNonLocked(boolean accountNonLocked) {
+  this.accountNonLocked = accountNonLocked;
+ }
+
+ public int getFailedAttempt() {
+  return failedAttempt;
+ }
+
+ public void setFailedAttempt(int failedAttempt) {
+  this.failedAttempt = failedAttempt;
+ }
+
+ public Date getLockTime() {
+  return lockTime;
+ }
+
+ public void setLockTime(Date lockTime) {
+  this.lockTime = lockTime;
  }
 
  public void setUserCode(String userCode) {
@@ -54,15 +89,6 @@ public class User  {
  )
 
  private Set<Role> role = new HashSet<>();
- /*
- @JsonIgnore
- @OneToMany(cascade = CascadeType.ALL, mappedBy ="patient")
- private Set<Appointment> appointment;
-
- @OneToMany(cascade = CascadeType.ALL, mappedBy ="user")
- private Set<Reclamation> reclamation;
-*/
-
 
  public User(String username, String email, String password) {
   this.username = username;
