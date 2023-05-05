@@ -42,11 +42,15 @@ public class Post {
     private double sentimentScore;
 
 
-    public Post(Long idPost, String namePost, String contentPost) {
+    public Post(Long idPost, String namePost, String contentPost,String imageUrl) {
         this.idPost = idPost;
         this.namePost = namePost;
         this.contentPost = contentPost;
+        this.imageUrl = imageUrl;
+
+
     }
+
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }

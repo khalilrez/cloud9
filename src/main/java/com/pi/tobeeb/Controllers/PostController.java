@@ -5,6 +5,7 @@ import com.pi.tobeeb.Entities.User;
 import com.pi.tobeeb.Repositorys.PostRepository;
 import com.pi.tobeeb.Repositorys.UserRepository;
 import com.pi.tobeeb.Utils.BadWordFilter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@Slf4j
 @RequestMapping(value="/post")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PostController {
 
     @Autowired
@@ -24,7 +27,8 @@ public class PostController {
 
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public Post createPost(@RequestBody Post post, @RequestParam("userid") Long userid) {
+    public Post createPost(@RequestBody Post post, @RequestParam("userid") Long userid ) {
+
         User user = userRepo.findById(userid).orElseThrow(() -> new RuntimeException("User not found"));
         post.setUser(user);
 
@@ -35,11 +39,12 @@ public class PostController {
     }
 
 
-    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    @RequestMapping(value = "/edit", method = RequestMethod.PUT)
     public Post editPost(@RequestBody Post new_post) {
         Post old_post = repo.findById(new_post.getIdPost()).get();
         old_post.setContentPost(new_post.getContentPost());
         old_post.setNamePost(new_post.getNamePost());
+        old_post.setImageUrl(new_post.getImageUrl());
         return repo.save(old_post);
     }
 
@@ -59,10 +64,12 @@ public class PostController {
         return repo.findAll();
     }
 
+
     @RequestMapping(value = "/byuser", method = RequestMethod.GET)
     public Iterable<Post> getPostsByUser(@RequestParam("iduser") Long iduser) {
 
         return repo.findPostsByUser(iduser);
+        
     }
 
     @GetMapping("/search")

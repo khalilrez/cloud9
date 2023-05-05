@@ -15,10 +15,11 @@ public interface PostRepository extends CrudRepository<Post, Long> {
     /*
     @Query("SELECT p FROM Post p LEFT JOIN FETCH p.comments WHERE p.idPost = :id")
     Optional<Post> findByIdWithComments(@Param("id") Long id);*/
-    @Query(" SELECT new com.pi.tobeeb.Entities.Post(p.idPost,p.namePost, p.contentPost) FROM Post p LEFT JOIN p.user u WHERE u.idUser = :iduser")
+    @Query(" SELECT p FROM Post p LEFT JOIN p.user u WHERE u.idUser = :iduser")
     Set<Post> findPostsByUser(@Param("iduser") Long iduser);
     @Query("SELECT p, COUNT(r) as reaction_count FROM Post p LEFT JOIN p.reactions r GROUP BY p ORDER BY reaction_count DESC")
     List<Object[]> findPostsOrderByReactionsDesc();
+
 
     List<Post> findByNamePostContainingOrContentPostContaining(String namePost, String contentPost);
 
