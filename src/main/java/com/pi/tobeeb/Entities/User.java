@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,6 +14,7 @@ import java.util.Set;
 @Setter
 //@NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Table(	name = "user",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "username"),
@@ -28,19 +30,20 @@ public class User  {
  private String password;
  private String phonenumber;
  //private String Location;
- private String picture;
+ @Column(name = "imageProfile",columnDefinition = "longtext")
+
+ private String imageProfile;
  private String verificationToken;
  private int isverified;
  private String userCode;
+ @Column(name = "account_non_locked")
+ private boolean accountNonLocked= true;
 
- public String getUserCode() {
-  return userCode;
- }
+ @Column(name = "failed_attempt")
+ private int failedAttempt;
 
- public void setUserCode(String userCode) {
-  this.userCode = userCode;
- }
-
+ @Column(name = "lock_time")
+ private Date lockTime;
  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
  @JoinTable(name = "userRoles",
          joinColumns = {
@@ -51,20 +54,47 @@ public class User  {
          }
  )
  private Set<Role> role = new HashSet<>();
- @JsonIgnore
- @OneToMany(cascade = CascadeType.ALL, mappedBy ="patient")
- private Set<Appointment> appointment;
+ public User() {
 
- @OneToMany(cascade = CascadeType.ALL, mappedBy ="user")
- private Set<Reclamation> reclamation;
+ }
 
- @OneToMany(mappedBy = "user1", cascade = CascadeType.ALL, orphanRemoval = true)
- private Set<Conversation> conversationAsUser1 = new HashSet<>();
+ public String getUserCode() {
+  return userCode;
+ }
 
- @OneToMany(mappedBy = "user2", cascade = CascadeType.ALL, orphanRemoval = true)
- private Set<Conversation> conversationAsUser2 = new HashSet<>();
+ public boolean isAccountNonLocked() {
+  return accountNonLocked;
+ }
 
- 
+ public void setAccountNonLocked(boolean accountNonLocked) {
+  this.accountNonLocked = accountNonLocked;
+ }
+
+ public int getFailedAttempt() {
+  return failedAttempt;
+ }
+
+ public void setFailedAttempt(int failedAttempt) {
+  this.failedAttempt = failedAttempt;
+ }
+
+ public Date getLockTime() {
+  return lockTime;
+ }
+
+ public void setLockTime(Date lockTime) {
+  this.lockTime = lockTime;
+ }
+
+ public void setUserCode(String userCode) {
+  this.userCode = userCode;
+ }
+
+ /*
+  @JsonIgnore
+  @OneToMany(cascade = CascadeType.ALL, mappedBy ="patient")
+   private Set<Appointment> appointment; */
+
  public User(String username, String email, String password) {
   this.username = username;
   this.email = email;
@@ -122,20 +152,8 @@ public class User  {
   return isverified;
  }
 
+
  public void setIsverified(int isverified) {
   this.isverified = isverified;
  }
-
-public Long getIdUser() {
-	return idUser;
-}
-
-public void setIdUser(Long idUser) {
-	this.idUser = idUser;
-}
-
-public User() {
-	super();
-}
-
 }

@@ -31,5 +31,4 @@ public class TwilioConfig {
 		this.sender_number = sender_number;
 	}
 
-    
 }

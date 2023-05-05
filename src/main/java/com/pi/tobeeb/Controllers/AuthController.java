@@ -1,9 +1,14 @@
 package com.pi.tobeeb.Controllers;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
 import com.pi.tobeeb.Entities.*;
@@ -11,6 +16,8 @@ import com.pi.tobeeb.Jwt.JwtUtils;
 import com.pi.tobeeb.Payload.request.*;
 import com.pi.tobeeb.Payload.response.JwtResponse;
 import com.pi.tobeeb.Payload.response.MessageResponse;
+
+import com.pi.tobeeb.Payload.response.ResponseType;
 import com.pi.tobeeb.Repositorys.RoleRepository;
 import com.pi.tobeeb.Repositorys.UserRepository;
 import com.pi.tobeeb.Security.UserDetailsImp;
@@ -18,11 +25,23 @@ import com.pi.tobeeb.Services.EmailService;
 import com.pi.tobeeb.Services.UserService;
 import com.pi.tobeeb.Services.VerificationTokenService;
 import com.pi.tobeeb.Utils.CodeUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import com.pi.tobeeb.Entities.User;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,31 +74,88 @@ public class AuthController {
     JwtUtils jwtUtils;
     @Autowired
     private VerificationTokenService verificationTokenService;
+
+
+
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
+        User usr = userRepository.findByUsername(loginRequest.getUsername()).get();
+       String message="" ;
+        if(usr !=null) {
+            if (!usr.isAccountNonLocked() && usr.getFailedAttempt() >= userService.MAX_FAILED_ATTEMPTS) {
+                message="Your account has been locked due to 3 failed attempts."
+                        + " It will be unlocked after 24 hours";
+                logger.error(message);
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        logger.error("hneeeee");
+                throw new LockedException("Your account has been locked due to 3 failed attempts."
+                        + " It will be unlocked after 24 hours.");
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        logger.error("hneeeee333");
+            }
+            logger.info("iciii");
+            if (!usr.isAccountNonLocked()) {
+                if (userService.unlockWhenTimeExpired(usr)) {
+                    message="Your account has been unlocked. Please try to login again.";
+                    logger.error(message);
+
+                    throw new LockedException("Your account has been unlocked. Please try to login again.");
+                }
 
 
-        String jwt = jwtUtils.generateJwtToken(authentication);
+            }
+                try {
+                    Authentication authentication = authenticationManager.authenticate(
+                            new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+                    if (userService.isValid(loginRequest.getUsername()) == true) {
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+                        String jwt = jwtUtils.generateJwtToken(authentication);
 
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getUser().getIdUser(), userDetails.getUsername(),
-                userDetails.getUser().getEmail(), roles));
+                        UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
+                        List<String> roles = userDetails.getAuthorities().stream()
+                                .map(item -> item.getAuthority())
+                                .collect(Collectors.toList());
+                        if (usr.getFailedAttempt() > 0) {
+                            userService.resetFailedAttempts(usr.getUsername());
+                        }
+
+                        return ResponseEntity.ok(new JwtResponse(jwt,
+                                userDetails.getUser().getIdUser(), userDetails.getUsername(),
+                                userDetails.getUser().getEmail(),roles,userDetails.getUser().getImageProfile()));
+
+                    }
+                    return ResponseEntity
+                            .badRequest()
+                            .body(new MessageResponse("Account is  not verified!"));
+                } catch (BadCredentialsException e) {
+                    userService.increaseFailedAttempts(usr);
+                    if (usr.getFailedAttempt() >= userService.MAX_FAILED_ATTEMPTS) {
+                        userService.lock(usr);
+                        message="Your account has been locked due to 3 failed attempts.\"\n" +
+                                "                                + \" It will be unlocked after 24 hours.";
+                        logger.error(message);
+
+                        throw new LockedException("Your account has been locked due to 3 failed attempts."
+                                + " It will be unlocked after 24 hours.");
+
+                    }
+                    message="Bad credentials";
+                    logger.error(message);
+
+                    throw new Exception("INVALID_CREDENTIALS", e);
+
+                }
+
+            }
+
+        return ResponseEntity
+                .badRequest()
+                .body(new MessageResponse(message));
     }
+
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SingupRequest signUpRequest) {
+        logger.error("iiiiiicccciiiiiiiiii");
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
@@ -96,15 +172,14 @@ public class AuthController {
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
-
         Set<String> strRoles = signUpRequest.getRole();
+        logger.error(strRoles.toString());
         Set<Role> roles = new HashSet<>();
         logger.error("iiiiiicccciiiiiiiiii");
 
         logger.error(String.valueOf(strRoles));
 
         if (strRoles == null) {
-
             Role userRole = roleRepository.findByName(ERole.ROLE_PATIENT)
 
                     .orElseThrow(() -> new RuntimeException("Error: Role5 is not found."));
@@ -126,7 +201,6 @@ public class AuthController {
 
                         break;
                     default:
-
                         Role userRole = roleRepository.findByName(ERole.ROLE_PHARMACY)
                                 .orElseThrow(() -> new RuntimeException("Error: Role1 is not found."));
                         roles.add(userRole);
@@ -134,17 +208,29 @@ public class AuthController {
             });
         }
 
-        user.setRoles(roles);
+        /*Set<ERole> roles =  signUpRequest.getRole();
+        Set<Role> valid_roles = new HashSet<Role>(){
+        };
+        roles.forEach(role -> {
+            Role userRole = roleRepository.findByName(role).orElseThrow(() -> new RuntimeException("Error: Role invalid."));
+            valid_roles.add(userRole);
+        });
+        user.setRoles(valid_roles);*/
         userRepository.save(user);
-        emailService.sendVerificationEmail(user);
+        //emailService.sendVerificationEmail(user);
         UserVerificationToken verificationToken = verificationTokenService.createVerificationToken(user); // création du jeton de vérification
         verificationTokenService.saveVerificationToken(verificationToken);
+        System.out.println(verificationToken.toString());
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
     @PutMapping("/activate/{verificationToken}")
     public ResponseEntity activateAccount(@PathVariable String verificationToken) {
+        logger.error("tokeen");
+        logger.error(verificationToken);
+
+
         User user = userService.activateUser(verificationToken);
         if (user != null) {
             String to = user.getEmail();
@@ -207,7 +293,24 @@ public class AuthController {
         return userService.resetSMS(newPassword);
     }
 
+    @DeleteMapping ({"/delete/{userName}"})
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
 
+    public void delete(@PathVariable String userName){
+        userService.delete(userName);
+    }
 
+    @PutMapping(value="/update/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) throws IOException {
 
-}
+        User updatedUser = userService.update(id,user);
+
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @PutMapping("/changepassword/{id}")
+    public ResponseType changePassword(@PathVariable Long id, @RequestBody ChangePasswordRequest password) {
+       Integer code = userService.changePassword(id, password);
+        return new ResponseType(code);
+    }
+    }

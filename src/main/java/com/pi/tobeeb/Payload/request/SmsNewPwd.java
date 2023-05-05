@@ -27,7 +27,5 @@ public class SmsNewPwd {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-    
-    
-    
+
 }

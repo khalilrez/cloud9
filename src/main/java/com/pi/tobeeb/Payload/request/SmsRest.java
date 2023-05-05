@@ -14,5 +14,4 @@ public class SmsRest {
 		this.phone = phone;
 	}
 
-    
 }
