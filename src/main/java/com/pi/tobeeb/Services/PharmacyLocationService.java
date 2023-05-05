@@ -1,6 +1,6 @@
 package com.pi.tobeeb.Services;
 
-import com.pi.tobeeb.Entities.Order2;
+import com.pi.tobeeb.Entities.Counttypepharmacy;
 import com.pi.tobeeb.Entities.PharmacyLocation;
 import com.pi.tobeeb.Interfaces.PharamcyLocationInterface;
 import com.pi.tobeeb.Repositorys.PharmacyLocationRepository;
@@ -50,5 +50,12 @@ public class PharmacyLocationService implements PharamcyLocationInterface {
     public List<PharmacyLocation> search(String searchTerm) {
         return repository.search(searchTerm);
     }
+
+    @Override
+    public List<Counttypepharmacy> countByTyp() {
+        return  repository.countByType();
+    }
+
+
 
 }

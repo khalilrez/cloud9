@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface Order2Repository extends JpaRepository<Order2, Integer> {
-    @Query("SELECT o FROM Order2 o WHERE o.orderItems LIKE %:searchTerm% OR o.Status LIKE %:searchTerm% OR o.totalprice LIKE %:searchTerm%")
+    @Query("SELECT o FROM Order2 o WHERE o.orderItems LIKE %:searchTerm% OR o.Status LIKE %:searchTerm% ")
     public List<Order2> search(@Param("searchTerm") String searchTerm);
 }

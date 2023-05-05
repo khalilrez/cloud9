@@ -1,5 +1,6 @@
 package com.pi.tobeeb.Controllers;
 
+import com.pi.tobeeb.Entities.Counttypepharmacy;
 import com.pi.tobeeb.Entities.PharmacyLocation;
 import com.pi.tobeeb.Services.PharmacyLocationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+@CrossOrigin(origins = "http://localhost:4200/")
 
 @RestController
 @RequestMapping("/api/PharamcyLocation")
@@ -32,7 +34,7 @@ public class PharamcyLocationController {
     public PharmacyLocation updatePharmacyLocation(@PathVariable int id,@RequestBody PharmacyLocation pharmacyLocation) {
         return pharamciservice.updatePharmacyLocation(id, pharmacyLocation);    }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("deleteph/{id}")
     public String deletePharmacyLocation(@PathVariable int id)
     {
         pharamciservice.deletePharmacyLocation(id);
@@ -51,6 +53,10 @@ public class PharamcyLocationController {
     @GetMapping("/search/{searchTerm}")
     public List<PharmacyLocation> searchPharmacy(@PathVariable("searchTerm") String searchTerm) {
         return  pharamciservice.search(searchTerm);
+    }
+    @GetMapping("/percentage")
+    public List<Counttypepharmacy> getpercentagebytype() {
+        return  pharamciservice.countByTyp();
     }
 
 

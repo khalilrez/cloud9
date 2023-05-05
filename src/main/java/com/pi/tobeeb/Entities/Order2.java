@@ -19,9 +19,11 @@ public class Order2 implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idOrder;
     private String orderItems;
+
    // @Enumerated(EnumType.STRING)
     private String Status;
     private double totalprice;
+    private int qte;
 
     @JsonIgnore
     @ManyToOne

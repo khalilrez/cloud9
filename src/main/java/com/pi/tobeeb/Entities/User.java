@@ -18,8 +18,8 @@ import java.util.Set;
 @AllArgsConstructor
 
 public class User implements Serializable {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
+ @Id
+ @GeneratedValue(strategy = GenerationType.IDENTITY)
 
  private int idUser;
  private String username;
@@ -35,7 +35,6 @@ public class User implements Serializable {
 
  @OneToMany(cascade = CascadeType.ALL, mappedBy ="user")
  private Set<Reclamation> reclamation;
-
  @OneToMany(cascade = CascadeType.ALL, mappedBy ="user")
  private Set<Order2> order2s;
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+@CrossOrigin(origins = "http://localhost:4200/")
 
 @RestController
 @RequestMapping("/api/orders")
@@ -25,7 +26,7 @@ public class Order2Controller {
     }
 
 
-    @PostMapping
+    @PostMapping("/add")
     public Order2 createOrder(@RequestBody Order2 order) {
         return order2Service.createOrder(order);
     }
@@ -35,7 +36,7 @@ public class Order2Controller {
         return order2Service.updateOrder(id, updatedOrder);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public String  deleteOrder(@PathVariable int id) {
         order2Service.deleteOrder(id);
         return "order deleted succefully";
@@ -44,4 +45,8 @@ public class Order2Controller {
     public List<Order2> searchOrders(@PathVariable("searchTerm") String searchTerm) {
         return order2Service.search(searchTerm);
     }
+
+
+
+
 }
