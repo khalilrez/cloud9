@@ -1,4 +1,5 @@
 package com.pi.tobeeb.Entities;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,12 +13,14 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Order implements Serializable {
+public class PharmacyLocation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idOrder;
-    private String orderItems;
-    private String Status;
-    private double totalprice;
-
+    private int idLocation;
+    private String name;
+    private float amplitude;
+    private float altitude;
+    private int tel ;
+    private String type;
+    private String address;
 }

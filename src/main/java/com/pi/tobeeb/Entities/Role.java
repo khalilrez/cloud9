@@ -18,15 +18,8 @@ public class Role {
     }
 
     public Role(ERole name) {
-		super();
-		this.name = name;
-	}
-
-	public Role(Long idRole, ERole name) {
-		super();
-		this.idRole = idRole;
-		this.name = name;
-	}
+        this.name = name;
+    }
 
     public Long getId() {
         return idRole;
@@ -43,6 +36,4 @@ public class Role {
     public void setName(ERole name) {
         this.name = name;
     }
-    
-    
 }
