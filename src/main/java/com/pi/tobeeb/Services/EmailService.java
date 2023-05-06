@@ -34,7 +34,7 @@ public class EmailService implements IUserEmailRepository {
         user.setVerificationToken(verificationTokenService.generateVerificationToken());
         message.setSubject("Vérification du compte");
         message.setText("Bonjour " + user.getUsername() + ",\n\n" +
-                "Veuillez cliquerr sur le lien ci-dessous pour activer votre compte :\n\n" +
+                "Veuillez cliquerr sur le lien ci-dessouus pour activer votre compte :\n\n" +
                 "http://localhost:4200/activate?token=" + user.getVerificationToken());
 
         userMailSender.send(message);
