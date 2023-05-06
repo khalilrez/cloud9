@@ -123,7 +123,7 @@ public class AppointmentController {
             LocalDateTime reservationDate = appointment.getDateStart();
 
             if (reservationDate.isBefore(currentDate.plusDays(1))) {
-                throw new IllegalArgumentException("Reservations can only be updated one day before the current date");
+                throw new IllegalArgumentException("Reservationns can only be updated one day before the current date");
             }
 
             Appointment existingAppointment = appointmentService.retrieveAppointment(id);
