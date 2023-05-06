@@ -9,37 +9,13 @@ public class JwtResponse {
     private String username;
     private String email;
     private List<String> roles;
-    private String imageProfile;
-    private int statusCode;
 
-    public JwtResponse(int statusCode) {
-        this.statusCode = statusCode;
-    }
-
-    public int getStatusCode() {
-        return statusCode;
-    }
-
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
-    }
-
-    public String getImageProfile() {
-        return imageProfile;
-    }
-
-    public void setImageProfile(String imageProfile) {
-        this.imageProfile = imageProfile;
-    }
-
-    public JwtResponse(String accessToken, Long id, String username, String email, List<String> roles, String img) {
+    public JwtResponse(String accessToken, Long id, String username, String email, List<String> roles) {
         this.token = accessToken;
         this.id = id;
         this.username = username;
         this.email = email;
         this.roles = roles;
-        this.imageProfile=img;
-
     }
 
     public String getAccessToken() {

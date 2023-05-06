@@ -207,6 +207,12 @@ private String HourForWorkingStart;
  private Set<Appointment> appointmentD;
   @OneToMany(cascade = CascadeType.ALL, mappedBy ="user")
  private Set<Order2> order2s;
+
+ @OneToMany(mappedBy = "user1", cascade = CascadeType.ALL, orphanRemoval = true)
+ private Set<Conversation> conversationAsUser1 = new HashSet<>();
+
+ @OneToMany(mappedBy = "user2", cascade = CascadeType.ALL, orphanRemoval = true)
+ private Set<Conversation> conversationAsUser2 = new HashSet<>();
  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
  @JoinTable(name = "userRoles",
          joinColumns = {
