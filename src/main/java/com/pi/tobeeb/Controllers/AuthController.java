@@ -65,27 +65,19 @@ public class AuthController {
 
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
+    public JwtResponse authenticateUser(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
         User usr = userRepository.findByUsername(loginRequest.getUsername()).get();
-       String message="" ;
         if(usr !=null) {
-            if (!usr.isAccountNonLocked() && usr.getFailedAttempt() >= userService.MAX_FAILED_ATTEMPTS) {
-                message="Your account has been locked due to 3 failed attempts."
-                        + " It will be unlocked after 24 hours";
-                logger.error(message);
-
-                throw new LockedException("Your account has been locked due to 3 failed attempts."
-                        + " It will be unlocked after 24 hours.");
-
-            }
-            logger.info("iciii");
             if (!usr.isAccountNonLocked()) {
                 if (userService.unlockWhenTimeExpired(usr)) {
-                    message="Your account has been unlocked. Please try to login again.";
-                    logger.error(message);
-
-                    throw new LockedException("Your account has been unlocked. Please try to login again.");
+                    return new  JwtResponse(320);
                 }
+            if (!usr.isAccountNonLocked() && usr.getFailedAttempt() >= userService.MAX_FAILED_ATTEMPTS) {
+
+                return new  JwtResponse(120);
+
+            }
+
 
 
             }
@@ -105,54 +97,41 @@ public class AuthController {
                             userService.resetFailedAttempts(usr.getUsername());
                         }
 
-                        return ResponseEntity.ok(new JwtResponse(jwt,
+                        return new JwtResponse(jwt,
                                 userDetails.getUser().getIdUser(), userDetails.getUsername(),
-                                userDetails.getUser().getEmail(),roles,userDetails.getUser().getImageProfile()));
+                                userDetails.getUser().getEmail(),roles,userDetails.getUser().getImageProfile());
 
                     }
-                    return ResponseEntity
-                            .badRequest()
-                            .body(new MessageResponse("Account is  not verified!"));
+                    return new JwtResponse(230);
                 } catch (BadCredentialsException e) {
                     userService.increaseFailedAttempts(usr);
                     if (usr.getFailedAttempt() >= userService.MAX_FAILED_ATTEMPTS) {
                         userService.lock(usr);
-                        message="Your account has been locked due to 3 failed attempts.\"\n" +
-                                "                                + \" It will be unlocked after 24 hours.";
-                        logger.error(message);
 
-                        throw new LockedException("Your account has been locked due to 3 failed attempts."
-                                + " It will be unlocked after 24 hours.");
+                        return new  JwtResponse(120);
 
                     }
-                    message="Bad credentials";
-                    logger.error(message);
 
-                    throw new Exception("INVALID_CREDENTIALS", e);
 
+                    return new JwtResponse(400);
                 }
 
             }
 
-        return ResponseEntity
-                .badRequest()
-                .body(new MessageResponse(message));
+        return new JwtResponse(404);
     }
 
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SingupRequest signUpRequest) {
+    public ResponseType registerUser(@Valid @RequestBody SingupRequest signUpRequest) {
         logger.error("iiiiiicccciiiiiiiiii");
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+            return new ResponseType(400);
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
+            return new ResponseType(404);
+
         }
 
         // Create new user's account
@@ -205,7 +184,8 @@ public class AuthController {
         UserVerificationToken verificationToken = verificationTokenService.createVerificationToken(user); // création du jeton de vérification
         verificationTokenService.saveVerificationToken(verificationToken);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return new ResponseType(200);
+
     }
 
     @PutMapping("/activate/{verificationToken}")
@@ -275,11 +255,9 @@ public class AuthController {
     public ResponseEntity<?> resetPasswordSMS (@RequestBody SmsNewPwd newPassword) {
         return userService.resetSMS(newPassword);
     }
-    @DeleteMapping ({"/delete/{userName}"})
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-
-    public void delete(@PathVariable String userName){
-        userService.delete(userName);
+    @DeleteMapping ({"/delete/{id}"})
+    public void delete(@PathVariable Long id){
+        userService.delete(id);
     }
 
     @PutMapping(value="/update/{id}")
@@ -294,6 +272,16 @@ public class AuthController {
     public ResponseType changePassword(@PathVariable Long id, @RequestBody ChangePasswordRequest password) {
        Integer code = userService.changePassword(id, password);
         return new ResponseType(code);
+    }
+
+    @GetMapping ("findbymail/{email}")
+    public User UserExist(@PathVariable String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @GetMapping ("getAll")
+    public Iterable<User>getAllUsers() {
+        return userService.findAll();
     }
     }
 

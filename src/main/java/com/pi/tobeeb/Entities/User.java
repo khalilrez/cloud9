@@ -30,6 +30,125 @@ public class User  {
  private String email;
  private String password;
  private String phonenumber;
+ private String Speciality;
+private String Gender;
+private String height;
+private String Weight;
+private String BloodType;
+private String age;
+private String Education;
+private String Certificate;
+private String firstName;
+private String LastName;
+private String HourForWorkingStart;
+ private String HourForWorkingEnd;
+ private String city;
+ private String PostCode;
+
+ public String getHourForWorkingStart() {
+  return HourForWorkingStart;
+ }
+
+ public void setHourForWorkingStart(String hourForWorkingStart) {
+  HourForWorkingStart = hourForWorkingStart;
+ }
+
+ public String getHourForWorkingEnd() {
+  return HourForWorkingEnd;
+ }
+
+ public void setHourForWorkingEnd(String hourForWorkingEnd) {
+  HourForWorkingEnd = hourForWorkingEnd;
+ }
+
+ public Long getIdUser() {
+  return idUser;
+ }
+
+ public void setIdUser(Long idUser) {
+  this.idUser = idUser;
+ }
+
+ public String getSpeciality() {
+  return Speciality;
+ }
+
+ public void setSpeciality(String speciality) {
+  Speciality = speciality;
+ }
+
+ public String getGender() {
+  return Gender;
+ }
+
+ public void setGender(String gender) {
+  Gender = gender;
+ }
+
+ public String getHeight() {
+  return height;
+ }
+
+ public void setHeight(String height) {
+  this.height = height;
+ }
+
+ public String getWeight() {
+  return Weight;
+ }
+
+ public void setWeight(String weight) {
+  Weight = weight;
+ }
+
+ public String getBloodType() {
+  return BloodType;
+ }
+
+ public void setBloodType(String bloodType) {
+  BloodType = bloodType;
+ }
+
+ public String getAge() {
+  return age;
+ }
+
+ public void setAge(String age) {
+  this.age = age;
+ }
+
+ public String getEducation() {
+  return Education;
+ }
+
+ public void setEducation(String education) {
+  Education = education;
+ }
+
+ public String getCertificate() {
+  return Certificate;
+ }
+
+ public void setCertificate(String certificate) {
+  Certificate = certificate;
+ }
+
+ public String getFirstName() {
+  return firstName;
+ }
+
+ public void setFirstName(String firstName) {
+  this.firstName = firstName;
+ }
+
+ public String getLastName() {
+  return LastName;
+ }
+
+ public void setLastName(String lastName) {
+  LastName = lastName;
+ }
+
  //private String Location;
  @Column(name = "imageProfile",columnDefinition = "longtext")
 

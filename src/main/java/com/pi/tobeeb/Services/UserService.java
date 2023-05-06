@@ -164,8 +164,9 @@ public class UserService {
         return ResponseEntity.ok(new MessageResponse(response));
     }
 
-    public void delete(String userName){
-        User u= repoUser.findByUsername(userName).orElse(null);
+    public void delete(Long id){
+        User u= repoUser.findByIdUser(id);
+        logger.info(u.getEmail());
         u.getRole().clear();
         repoUser.delete(u);
     }
@@ -177,9 +178,12 @@ public class UserService {
       user2.setImageProfile(user.getImageProfile());
       user2.setPhonenumber(user.getPhonenumber());
       user2.setUsername(user.getUsername());
+      user2.setAge(user.getAge());
+      user2.setBloodType(user.getBloodType());
+      user.setFirstName(user.getFirstName());
+      user.setLastName(user.getLastName());
         return repoUser.save(user2);
     }
-
 
     public Boolean isValid(String username){
         User user = repoUser.findByUsername(username).get();
@@ -211,6 +215,7 @@ public class UserService {
         long currentTimeInMillis = System.currentTimeMillis();
 
         if (lockTimeInMillis + LOCK_TIME_DURATION < currentTimeInMillis) {
+            logger.error("hounii");
             user.setAccountNonLocked(true);
             user.setLockTime(null);
             user.setFailedAttempt(0);
@@ -222,6 +227,9 @@ public class UserService {
 
         return false;
 
+}
+public List <User> GetByRole(String role){
+        return repoUser.findByRoleName(role);
 }
 
 
@@ -240,6 +248,13 @@ public class UserService {
             return 400;
         }
     }
+
+
+    public List < User > findAll() {
+        return repoUser.findAll();
+    }
+
+
 
 
 

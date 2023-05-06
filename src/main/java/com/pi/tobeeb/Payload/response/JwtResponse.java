@@ -10,6 +10,19 @@ public class JwtResponse {
     private String email;
     private List<String> roles;
     private String imageProfile;
+    private int statusCode;
+
+    public JwtResponse(int statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+    }
 
     public String getImageProfile() {
         return imageProfile;

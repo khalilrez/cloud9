@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByEmail(String email);
     User  findByVerificationToken(String Token);
-
+    List <User> findByRoleName(String name);
 
     public User findByEmail(String UserEmail);
     @Query("SELECT u FROM User u WHERE u.isverified = 0")
