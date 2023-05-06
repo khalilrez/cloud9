@@ -44,7 +44,7 @@ public class EmailService implements IUserEmailRepository {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom("tobeeb2023@gmail.com");
         simpleMailMessage.setTo(mail.getTo());
-        simpleMailMessage.setSubject("Code Active");
+        simpleMailMessage.setSubject("Code Active!!");
         simpleMailMessage.setText("Hello This code will let you change your forget password");
         simpleMailMessage.setText(mail.getCode());
         userMailSender.send(simpleMailMessage);
