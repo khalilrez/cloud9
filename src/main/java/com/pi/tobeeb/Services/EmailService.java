@@ -56,7 +56,7 @@ public class EmailService implements IUserEmailRepository {
         helper.setTo(recipientEmail);
         helper.setSubject("Confirmation de rendez-vous");
         helper.setText("Votre rendez-vous  a été ajouté avec succès.");
-        javaMailSender.send(message);
+        userMailSender.send(message);
     }
 
 

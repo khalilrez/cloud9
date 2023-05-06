@@ -153,13 +153,13 @@ public class AppointmentController {
         return appointmentService.retrieveAppointment(appointment);
     }
     @GetMapping("/patient/{userId}/appointments")
-    public List<Appointment> getAppointmentsByUser(@PathVariable int userId) {
+    public List<Appointment> getAppointmentsByUser(@PathVariable Long userId) {
         User user = new User();
         user.setIdUser(userId);
         return appointmentService.findAppointmentsByUser(user);
     }
     @GetMapping("/doctor/{userId}/appointments")
-    public List<Appointment> getAppointmentsByDoctor(@PathVariable int userId) {
+    public List<Appointment> getAppointmentsByDoctor(@PathVariable Long userId) {
         User user = new User();
         user.setIdUser(userId);
         return appointmentService.findAppointmentsByDoctor(user);
