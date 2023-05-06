@@ -3,6 +3,7 @@ package com.pi.tobeeb.Controllers;
 import com.pi.tobeeb.Dto.ConsultationFileDTO;
 import com.pi.tobeeb.Dto.PrescriptionDTO;
 import com.pi.tobeeb.Dto.TestDTO;
+import com.pi.tobeeb.Entities.Appointment;
 import com.pi.tobeeb.Entities.ConsultationFile;
 import com.pi.tobeeb.Entities.Prescription;
 import com.pi.tobeeb.Entities.Test;
@@ -26,6 +27,7 @@ public class ConsultationFileController {
 
     @Autowired
     private ConsultationFileService consultationFileService;
+
 
 
     //Get Image of Test , takes id of a "Test" as PathVariable  , Returns Byte[]

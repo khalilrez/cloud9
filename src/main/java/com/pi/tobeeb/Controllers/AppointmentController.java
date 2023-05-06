@@ -1,5 +1,6 @@
 package com.pi.tobeeb.Controllers;
 
+import com.pi.tobeeb.Dto.AppointmentDTO;
 import com.pi.tobeeb.Entities.Appointment;
 import com.pi.tobeeb.Payload.appointments.CreateAppointmentRequest;
 import com.pi.tobeeb.Repositorys.AppointmentRepository;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -60,9 +62,22 @@ public class AppointmentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Appointment>> getAllAppointments() {
+    public ResponseEntity<List<AppointmentDTO>> getAllAppointments() {
         List<Appointment> appointments = appointmentService.getAllAppointments();
-        return new ResponseEntity<>(appointments, HttpStatus.OK);
+        System.out.println(appointments);
+        List<AppointmentDTO> appointmentDTOS = new ArrayList<>();
+        for (Appointment appointment : appointments) {
+            AppointmentDTO appointmentDTO  = new AppointmentDTO();
+            appointmentDTO.setIdAppointment(appointment.getIdAppointment());
+            appointmentDTO.setDoctor(appointment.getDoctor().getUsername());
+            appointmentDTO.setDoctorId(appointment.getDoctor().getId());
+            appointmentDTO.setPatientId(appointment.getPatient().getId());
+            appointmentDTO.setPatient(appointment.getPatient().getUsername());
+            appointmentDTO.setConsultationFileId(appointment.getConsultationFile().getIdFile());
+            appointmentDTO.setDateStart(appointment.getDateStart());
+            appointmentDTOS.add(appointmentDTO);
+        }
+        return new ResponseEntity<>(appointmentDTOS, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
