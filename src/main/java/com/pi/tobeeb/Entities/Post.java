@@ -42,7 +42,7 @@ public class Post {
     private double sentimentScore;
 
 
-    public Post(Long idPost, String namePost, String contentPost) {
+    public Post(Long idPost, String namePost, String contentPost, Timestamp createdAt ) {
         this.idPost = idPost;
         this.namePost = namePost;
         this.contentPost = contentPost;

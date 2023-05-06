@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping(value="/post")
 public class PostController {
@@ -35,7 +35,7 @@ public class PostController {
     }
 
 
-    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    @RequestMapping(value = "/edit", method = RequestMethod.PUT)
     public Post editPost(@RequestBody Post new_post) {
         Post old_post = repo.findById(new_post.getIdPost()).get();
         old_post.setContentPost(new_post.getContentPost());

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Set;
-
+@CrossOrigin(origins = "http://localhost:4200")
 
 @RestController
 @RequestMapping(value="/comment")
