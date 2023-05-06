@@ -11,12 +11,12 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200/")
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/PharamcyLocation")
 public class PharamcyLocationController {
     @Autowired
     private PharmacyLocationService pharamciservice ;
 
-    @PostMapping("/addPhar")
+    @PostMapping
     public PharmacyLocation createPharmacyLocation(@RequestBody PharmacyLocation pharmacyLocation) {
         return pharamciservice.createPharmacyLocation(pharmacyLocation);
     }
@@ -25,7 +25,7 @@ public class PharamcyLocationController {
     public PharmacyLocation getPharmacyLocation(@PathVariable int id) {
      return pharamciservice.getPharmacyLocationById(id);
     }
-    @GetMapping("/getALLPhar")
+    @GetMapping
     public List<PharmacyLocation> getAllPharmacyLocations() {
         return pharamciservice.getAllPharmacyLocations();
     }
