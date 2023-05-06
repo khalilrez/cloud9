@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -26,4 +27,7 @@ public class Delivery implements Serializable {
     private String status;
     private String vehicule;
     private double price;
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "delivery")
+    private Set<Order2> orders;
 }

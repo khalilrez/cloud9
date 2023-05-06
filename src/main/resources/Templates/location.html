@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pharmacy Locations</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css' type='text/css' />
+
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+        .marker {
+            background-image: url('static/mapbox-icon.png');
+            background-size: cover;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .mapboxgl-popup {
+            max-width: 200px;
+        }
+
+        .mapboxgl-popup-content {
+            text-align: center;
+            font-family: 'Open Sans', sans-serif;
+        }
+    </style>
+</head>
+<body>
+<div id='map' ></div>
+
+
+
+<script src='https://unpkg.com/axios/dist/axios.min.js'></script>
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoicmloYWJuYWJsaTIyIiwiYSI6ImNsZnNxNGlyeDA4bnYzbnNjenBxM3ZnMGkifQ.P2R2dZjqD3Mm5e6SXQFwiw';
+
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [-74.5, 40], // starting position [longitude, latitude]
+        zoom: 9 // starting zoom
+    });
+    // Add zoom and navigation controls
+    var navControl = new mapboxgl.NavigationControl();
+    var geoControl = new mapboxgl.GeolocateControl({
+        positionOptions: {
+            enableHighAccuracy: true
+        },
+        trackUserLocation: true
+    });
+    map.addControl(navControl);
+    map.addControl(geoControl);
+
+
+    axios.get('/api/PharamcyLocation')
+        .then(function (response) {
+            var locations = response.data;
+
+            locations.forEach(function(location) {
+                var marker = new mapboxgl.Marker()
+                    .setLngLat([location.altitude, location.amplitude])
+                    .setPopup(new mapboxgl.Popup({ offset: 25 })
+                        .setHTML('<h3>' + location.name + '</h3>   <p>' ))
+                    .addTo(map);
+            });
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+
+                var marker = new mapboxgl.Marker({color: '#f00'})
+                    .setLngLat([longitude, latitude])
+                    .addTo(map);
+            }, function(error) {
+                console.log(error);
+            });
+        })
+    var directions = new MapboxDirections({
+        accessToken: mapboxgl.accessToken,
+        unit: 'metric',
+        profile: 'mapbox/driving',
+        controls: {
+            instructions: true,
+            inputs: false,
+            profileSwitcher: true
+        }
+    });
+    map.addControl(directions, 'top-left');
+    navigator.geolocation.getCurrentPosition(function(position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+
+        directions.setOrigin([longitude, latitude]);
+    }, function(error) {
+        console.log(error);
+    });
+    locations.forEach(function(location) {
+        var marker = new mapboxgl.Marker()
+            .setLngLat([location.amplitude, location.altitude])
+            .setPopup(new mapboxgl.Popup({ offset: 25 })
+                .setHTML('<h3>' + location.name + '</h3><p>'))
+
+            .addTo(map);
+
+        marker.getElement().addEventListener('click', function() {
+            directions.setDestination([location.amplitude, location.altitude]);
+        });
+    });
+
+    directions.on('route', function(event) {
+        var route = event.route[0];
+        var geojson = {
+            type: 'Feature',
+            geometry: {
+                type: 'LineString',
+                coordinates: route.geometry.coordinates
+            }
+        };
+        if (map.getSource('route')) {
+            map.getSource('route').setData(geojson);
+        } else {
+            map.addLayer({
+                id: 'route',
+                type: 'line',
+                source: {
+                    type: 'geojson',
+                    data: geojson
+                },
+                layout: {
+                    'line-join': 'round',
+                    'line-cap': 'round'
+                },
+                paint: {
+                    'line-color': '#3887be',
+                    'line-width': 5,
+                    'line-opacity': 0.75
+                }
+            });
+        }
+    });
+
+</script>
+</body>
+</html>
