@@ -1,4 +1,4 @@
-package com.pi.tobeeb.Entities;
+ackage com.pi.tobeeb.Entities;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -197,6 +197,14 @@ private String HourForWorkingStart;
   this.userCode = userCode;
  }
 
+ @JsonIgnore
+
+ @OneToMany(cascade = CascadeType.ALL, mappedBy ="patient")
+ private Set<Appointment> appointmentP;
+ @JsonIgnore
+
+ @OneToMany(cascade = CascadeType.ALL, mappedBy ="doctor")
+ private Set<Appointment> appointmentD;
  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
  @JoinTable(name = "userRoles",
          joinColumns = {
