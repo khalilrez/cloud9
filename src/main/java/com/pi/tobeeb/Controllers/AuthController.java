@@ -1,4 +1,9 @@
 package com.pi.tobeeb.Controllers;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -11,6 +16,7 @@ import com.pi.tobeeb.Jwt.JwtUtils;
 import com.pi.tobeeb.Payload.request.*;
 import com.pi.tobeeb.Payload.response.JwtResponse;
 import com.pi.tobeeb.Payload.response.MessageResponse;
+
 import com.pi.tobeeb.Payload.response.ResponseType;
 import com.pi.tobeeb.Repositorys.RoleRepository;
 import com.pi.tobeeb.Repositorys.UserRepository;
@@ -19,6 +25,12 @@ import com.pi.tobeeb.Services.EmailService;
 import com.pi.tobeeb.Services.UserService;
 import com.pi.tobeeb.Services.VerificationTokenService;
 import com.pi.tobeeb.Utils.CodeUtils;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import com.pi.tobeeb.Entities.User;
 
 import org.slf4j.Logger;
@@ -62,6 +74,7 @@ public class AuthController {
     JwtUtils jwtUtils;
     @Autowired
     private VerificationTokenService verificationTokenService;
+
 
 
     @PostMapping("/signin")
@@ -142,17 +155,14 @@ public class AuthController {
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
-
         Set<String> strRoles = signUpRequest.getRole();
         logger.error(strRoles.toString());
-
         Set<Role> roles = new HashSet<>();
         logger.error("iiiiiicccciiiiiiiiii");
 
         logger.error(String.valueOf(strRoles));
 
         if (strRoles == null) {
-
             Role userRole = roleRepository.findByName(ERole.ROLE_PATIENT)
 
                     .orElseThrow(() -> new RuntimeException("Error: Role5 is not found."));
@@ -174,7 +184,6 @@ public class AuthController {
 
                         break;
                     default:
-
                         Role userRole = roleRepository.findByName(ERole.ROLE_PHARMACY)
                                 .orElseThrow(() -> new RuntimeException("Error: Role1 is not found."));
                         roles.add(userRole);
@@ -182,11 +191,19 @@ public class AuthController {
             });
         }
 
-        user.setRoles(roles);
+        /*Set<ERole> roles =  signUpRequest.getRole();
+        Set<Role> valid_roles = new HashSet<Role>(){
+        };
+        roles.forEach(role -> {
+            Role userRole = roleRepository.findByName(role).orElseThrow(() -> new RuntimeException("Error: Role invalid."));
+            valid_roles.add(userRole);
+        });
+        user.setRoles(valid_roles);*/
         userRepository.save(user);
-        emailService.sendVerificationEmail(user);
+        //emailService.sendVerificationEmail(user);
         UserVerificationToken verificationToken = verificationTokenService.createVerificationToken(user); // création du jeton de vérification
         verificationTokenService.saveVerificationToken(verificationToken);
+        System.out.println(verificationToken.toString());
 
         return new ResponseType(200);
 
@@ -259,9 +276,13 @@ public class AuthController {
     public ResponseEntity<?> resetPasswordSMS (@RequestBody SmsNewPwd newPassword) {
         return userService.resetSMS(newPassword);
     }
-    @DeleteMapping ({"/delete/{id}"})
-    public void delete(@PathVariable Long id){
-        userService.delete(id);
+
+    @DeleteMapping ({"/delete/{userName}"})
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+
+    public void delete(@PathVariable String userName){
+        userService.delete(userName);
+
     }
 
     @PutMapping(value="/update/{id}")
@@ -297,7 +318,5 @@ public class AuthController {
     public User GetDoctorById(@PathVariable Long id) {
         return userRepository.findByIdUser( id);
     }
+
 }
-
-
-

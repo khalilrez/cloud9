@@ -1,5 +1,6 @@
 package com.pi.tobeeb.Services;
 
+
 import com.pi.tobeeb.Controllers.AuthController;
 import com.pi.tobeeb.Entities.ERole;
 import com.pi.tobeeb.Entities.ResetToken;
@@ -10,6 +11,9 @@ import com.pi.tobeeb.Payload.request.SmsNewPwd;
 import com.pi.tobeeb.Payload.request.SmsRest;
 import com.pi.tobeeb.Payload.response.MessageResponse;
 import com.pi.tobeeb.Repositorys.ResetTokenRepository;
+import com.pi.tobeeb.Repositorys.UserRepository;
+import com.pi.tobeeb.Utils.CodeUtils;
+import com.pi.tobeeb.Utils.SmsConfig;
 import com.pi.tobeeb.Repositorys.RoleRepository;
 import com.pi.tobeeb.Repositorys.UserRepository;
 import com.pi.tobeeb.Utils.CodeUtils;
@@ -49,6 +53,7 @@ public class UserService {
     @Autowired
     private JavaMailSender userMailSender;
     @Autowired
+
     private RoleRepository roleDao;
 
     @Autowired
@@ -164,9 +169,8 @@ public class UserService {
         return ResponseEntity.ok(new MessageResponse(response));
     }
 
-    public void delete(Long id){
-        User u= repoUser.findByIdUser(id);
-        logger.info(u.getEmail());
+    public void delete(String userName){
+        User u= repoUser.findByUsername(userName).orElse(null);
         u.getRole().clear();
         repoUser.delete(u);
     }
@@ -237,7 +241,7 @@ public class UserService {
         return false;
 
 }
-public List <User> GetByRole(String role){
+public List <User> GetByRole(ERole role){
         return repoUser.findByRoleName(role);
 }
 
@@ -258,13 +262,8 @@ public List <User> GetByRole(String role){
         }
     }
 
-
     public List < User > findAll() {
         return repoUser.findAll();
     }
-
-
-
-
 
 }

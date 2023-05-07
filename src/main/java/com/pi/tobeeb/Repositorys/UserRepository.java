@@ -3,11 +3,18 @@ package com.pi.tobeeb.Repositorys;
 import java.util.List;
 import java.util.Optional;
 
+<<<<<<< HEAD
+import java.util.Set;
+
+import com.pi.tobeeb.Entities.Comment;
+=======
 import com.pi.tobeeb.Entities.ERole;
+>>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
 import com.pi.tobeeb.Entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 
@@ -15,6 +22,7 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
     User findByIdUser(Long id);
+
     Boolean existsByUsername(String username);
 
     Boolean existsByEmail(String email);
