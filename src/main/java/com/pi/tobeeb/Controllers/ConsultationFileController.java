@@ -7,7 +7,11 @@ import com.pi.tobeeb.Entities.Appointment;
 import com.pi.tobeeb.Entities.ConsultationFile;
 import com.pi.tobeeb.Entities.Prescription;
 import com.pi.tobeeb.Entities.Test;
+
+import com.pi.tobeeb.Repositorys.ConsultationFileRepository;
 import com.pi.tobeeb.Services.ConsultationFileService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,6 +31,12 @@ public class ConsultationFileController {
 
     @Autowired
     private ConsultationFileService consultationFileService;
+
+    @Autowired
+    private ConsultationFileRepository consultationFileRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(ConsultationFileController.class);
+
 
 
 
@@ -80,7 +90,7 @@ public class ConsultationFileController {
     }
 
     @GetMapping("/appointment/{id}")
-    public ResponseEntity<ConsultationFileDTO> getConsultationFileByAppointment(@PathVariable Long id) {
+    public ResponseEntity<ConsultationFileDTO> getConsultationFileByAppointment(@PathVariable int id) {
         ConsultationFile consultationFile =  consultationFileService.getConsultationFileByAppointment(id);
         ConsultationFileDTO consultationFileDTO = consultationFileModelToDTO(consultationFile);
         return new ResponseEntity<>(consultationFileDTO,HttpStatus.OK);
@@ -106,9 +116,29 @@ public class ConsultationFileController {
         PrescriptionDTO prescriptionDTO = new PrescriptionDTO();
         Prescription prescription = consultationFileService.getPrescriptionById(id);
         prescriptionDTO.setPrescriptionId(prescription.getIdPrescription());
-        prescriptionDTO.setContent(prescriptionDTO.getContent());
+
+        prescriptionDTO.setContent(prescription.getContent());
         prescriptionDTO.setDate(prescription.getCreationDate());
         return  new ResponseEntity<>(prescriptionDTO,HttpStatus.OK);
+    }
+
+
+    @PutMapping("/prescription/{id}")
+    public ResponseEntity<ConsultationFileDTO> updatePrescription(@PathVariable int id, @RequestBody String content){
+        ConsultationFile consultationFile = consultationFileService.getConsultationFileByAppointment(id);
+        consultationFile.getPrescription().setContent(content);
+        consultationFileRepository.save(consultationFile);
+        ConsultationFileDTO consultationFileDTO = consultationFileModelToDTO(consultationFile);
+        return new ResponseEntity<>(consultationFileDTO,HttpStatus.OK);
+    }
+    @PutMapping("/note/{id}")
+    public ResponseEntity<ConsultationFileDTO> updateNote(@PathVariable int id, @RequestBody String content){
+        logger.info("THE VARIABLES CONTAINS : "+ content);
+        ConsultationFile consultationFile = consultationFileService.getConsultationFileByAppointment(id);
+        consultationFile.setDoctorNotes(content);
+        consultationFileRepository.save(consultationFile);
+        ConsultationFileDTO consultationFileDTO = consultationFileModelToDTO(consultationFile);
+        return new ResponseEntity<>(consultationFileDTO,HttpStatus.OK);
     }
 
     @GetMapping("/tests/{id}")
@@ -137,7 +167,7 @@ public class ConsultationFileController {
         ConsultationFileDTO consultationFileDTO = new ConsultationFileDTO();
         consultationFileDTO.setIdFile(consultationFile.getIdFile());
         consultationFileDTO.setDoctorNotes(consultationFile.getDoctorNotes());
-        consultationFileDTO.setAppointmentId(consultationFile.getAppointment().getIdAppointment());
+        consultationFileDTO.setAppointmentId((long) consultationFile.getAppointment().getIdAppointment());
         consultationFileDTO.setPrescriptionId(consultationFile.getPrescription().getIdPrescription());
         consultationFileDTO.setAppointmentDate(consultationFile.getAppointment().getDateStart());
         return  consultationFileDTO;

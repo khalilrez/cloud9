@@ -1,5 +1,8 @@
 package com.pi.tobeeb.Payload.request;
 
+
+
+import com.pi.tobeeb.Entities.ERole;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;

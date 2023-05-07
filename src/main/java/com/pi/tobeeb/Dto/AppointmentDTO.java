@@ -14,6 +14,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,7 +23,8 @@ import java.time.LocalDate;
 public class AppointmentDTO implements Serializable {
     private Long idAppointment;
     private TypeAppointment type;
-    private LocalDate dateStart;
+
+    private LocalDateTime dateStart;
     private AppointmentStatus status;
     private String patient;
     private Long patientId;
