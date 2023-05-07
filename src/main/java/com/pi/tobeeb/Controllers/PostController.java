@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @Slf4j
 @RequestMapping(value="/post")

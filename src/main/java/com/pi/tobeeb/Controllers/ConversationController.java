@@ -51,18 +51,11 @@ import org.springframework.core.io.ResourceLoader;
 @RestController
 @RequestMapping("/conversation")
 public class ConversationController {
-<<<<<<< HEAD
 	@Value("${upload.folder.path}")
     private String uploadFolderPath;
     @Autowired
     private ConversationRepository conversationRepository;
-    
-=======
 
-    @Autowired
-    private ConversationRepository conversationRepository;
-
->>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -72,7 +65,6 @@ public class ConversationController {
     @Autowired
     private ResourceLoader resourceLoader;
     @PostMapping(value="/save/{idsend}/{idrec}")
-<<<<<<< HEAD
 	public Conversation save(@PathVariable(value = "idsend") Long idsend,@PathVariable(value = "idrec") Long idrec){
 		 Calendar calendar = Calendar.getInstance();
 		 calendar.add(Calendar.HOUR,1);
@@ -114,66 +106,13 @@ public class ConversationController {
         
         // Add the message to the discussion
         conversation.getMessages().add(message);
-        
-=======
-    public Conversation save(@PathVariable(value = "idsend") Long idsend,@PathVariable(value = "idrec") Long idrec){
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR,1);
-        Date date =  calendar.getTime();
-        Conversation c = new Conversation();
-        User user1 = userRepository.findById(idsend).get();
-        User user2 = userRepository.findById(idrec).get();
-        c.setUser1(user1);
-        c.setUser2(user2);
-        c.setLastupdate(date);
-        return conversationRepository.save(c);
-    }
-    @PostMapping(value = "/addmessage/{id}/{iduser}/{file}")
-    public Conversation addMessagewithfile(@PathVariable(value = "id") Long conversationId,@PathVariable(value = "iduser") Long iduser,
-                                           @RequestBody Message message, @PathVariable(value = "file",required = false) String file) {
-        // Find the discussion
-        Conversation conversation = conversationRepository.findById(conversationId).get();
 
-        User usercon  = userRepository.findById(iduser).get();
-        System.out.println(usercon);
-        System.out.println("--------------");
-        System.out.println(message.getText());
-        Calendar calendar = Calendar.getInstance();
-        message.setUser(usercon);
-        message.setConversation(conversation);
-        calendar.add(Calendar.HOUR,1);
-        Date date =  calendar.getTime();
-        message.setDate(date);
-        conversation.setLastupdate(date);
-        // Find the sender user
-
-        // If a file is provided, add it to the message
-        if (file != null) {
-            message.setFile(file);
-        }
-
-        // Save the new message to the database
-        messageRepository.save(message);
-
-        // Add the message to the discussion
-        conversation.getMessages().add(message);
-
->>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
         // Save the updated discussion to the database
         return conversationRepository.save(conversation);
     }
     @PostMapping(value = "/addmessage/{id}/{iduser}")
     public Conversation addMessage(@PathVariable(value = "id") Long conversationId,@PathVariable(value = "iduser") Long iduser,
-<<<<<<< HEAD
-    		@RequestBody Message message) {
-        // Find the discussion
-    	Conversation conversation = conversationRepository.findById(conversationId).get();
-    	
-		 User usercon  = userRepository.findById(iduser).get();
-		 System.out.println(usercon);
-		 System.out.println("--------------");
-		 System.out.println(message.getText());
-=======
+
                                    @RequestBody Message message) {
         // Find the discussion
         Conversation conversation = conversationRepository.findById(conversationId).get();
@@ -182,7 +121,6 @@ public class ConversationController {
         System.out.println(usercon);
         System.out.println("--------------");
         System.out.println(message.getText());
->>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
         // Check for prohibited words and replace with asterisks
         String text = message.getText();
         List<ProhibitedWord> prohibitedWords = prohibitedWordRepository.findAll();
@@ -201,7 +139,7 @@ public class ConversationController {
 
 
         message.setText(text);
-<<<<<<< HEAD
+
     	Calendar calendar = Calendar.getInstance();
     	message.setUser(usercon);
     	message.setConversation(conversation);
@@ -221,29 +159,11 @@ public class ConversationController {
     }
         
 
-       @PostMapping("/uploadFile")
-=======
-        Calendar calendar = Calendar.getInstance();
-        message.setUser(usercon);
-        message.setConversation(conversation);
-        calendar.add(Calendar.HOUR,1);
-        Date date =  calendar.getTime();
-        message.setDate(date);
-        conversation.setLastupdate(date);
-        // Find the sender user
-        // Save the new message to the database
-        messageRepository.save(message);
 
-        // Add the message to the discussion
-        conversation.getMessages().add(message);
-
-        // Save the updated discussion to the database
-        return conversationRepository.save(conversation);
-    }
 
 
       /* @PostMapping("/uploadFile")
->>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
+
         @ResponseBody
         public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
             try {
@@ -324,4 +244,4 @@ public class ConversationController {
         return conversationRepository.getConverByUser(id);
     }
 }
->>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
+

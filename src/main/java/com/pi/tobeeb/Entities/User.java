@@ -29,8 +29,7 @@ public class User  {
  private String email;
  private String password;
  private String phonenumber;
-<<<<<<< HEAD
-=======
+
  private String speciality;
  private String gender;
  private String height;
@@ -46,15 +45,6 @@ public class User  {
  private String hourForWorkingEnd;
  private String city;
  private String postCode;
-
-
-
-
-
-
-
-
->>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
  //private String Location;
  @Column(name = "imageProfile",columnDefinition = "longtext")
 
@@ -116,22 +106,7 @@ public class User  {
   this.userCode = userCode;
  }
 
-<<<<<<< HEAD
- /*
-  @JsonIgnore
-  @OneToMany(cascade = CascadeType.ALL, mappedBy ="patient")
-   private Set<Appointment> appointment; */
-=======
- @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
- @JoinTable(name = "userRoles",
-         joinColumns = {
-                 @JoinColumn(name = "id_User")
-         },
-         inverseJoinColumns = {
-                 @JoinColumn(name = "id_Role")
-         }
- )
- private Set<Role> role = new HashSet<>();
+
 
  @JsonIgnore
 
@@ -150,7 +125,6 @@ public class User  {
  @OneToMany(mappedBy = "user2", cascade = CascadeType.ALL, orphanRemoval = true)
  private Set<Conversation> conversationAsUser2 = new HashSet<>();
 
->>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
 
  public User(String username, String email, String password) {
   this.username = username;
@@ -208,10 +182,7 @@ public class User  {
  public int getIsverified() {
   return isverified;
  }
-<<<<<<< HEAD
 
-=======
->>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
 
  public void setIsverified(int isverified) {
   this.isverified = isverified;
