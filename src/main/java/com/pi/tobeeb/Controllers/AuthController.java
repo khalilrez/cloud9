@@ -285,10 +285,9 @@ public class AuthController {
         return userService.resetSMS(newPassword);
     }
 
-    @DeleteMapping ({"/delete/{userName}"})
-    public void delete(@PathVariable String userName){
-        userService.delete(userName);
-
+    @DeleteMapping ({"/delete/{id}"})
+    public void delete(@PathVariable Long id){
+        userService.delete(id);
     }
 
     @PutMapping(value="/update/{id}")

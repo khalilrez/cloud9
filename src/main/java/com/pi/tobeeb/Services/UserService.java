@@ -170,8 +170,8 @@ public class UserService {
         return ResponseEntity.ok(new MessageResponse(response));
     }
 
-    public void delete(String userName){
-        User u= repoUser.findByUsername(userName).orElse(null);
+    public void delete(Long id){
+        User u= repoUser.findByIdUser(id);
         u.getRole().clear();
         repoUser.delete(u);
     }
