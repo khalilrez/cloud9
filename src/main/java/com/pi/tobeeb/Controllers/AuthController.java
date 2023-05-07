@@ -287,16 +287,17 @@ public class AuthController {
     public Iterable<User>getAllUsers() {
         return userService.findAll();
     }
-    }
+
 
     @GetMapping ("getDoctor/{role}")
     public Iterable<User>GetDoctor(@PathVariable ERole role) {
-        return userRepository.findByRoleName( role);
+        return userRepository.findByRoleName(role);
     }
     @GetMapping ("getDoctorById/{id}")
     public User GetDoctorById(@PathVariable Long id) {
         return userRepository.findByIdUser( id);
     }
+}
 
 
 
