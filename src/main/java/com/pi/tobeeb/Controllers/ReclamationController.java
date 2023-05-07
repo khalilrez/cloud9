@@ -39,7 +39,7 @@ public class ReclamationController {
     @PostMapping("/ajouterreclamation")
     public Reclamation saveReclamation(@RequestBody Reclamation reclamation) {
 
-        emailService.sendSimpleMessage("yassine.khanfir@esprit.tn","Réclamation","Bonjour\n Votre reclamation sera traiter dans le delais");
+        emailService.sendEmail("yassine.khanfir@esprit.tn","Réclamation","Bonjour\n Votre reclamation sera traiter dans le delais");
         return reclamationService.createReclamation(reclamation);
     }
 
