@@ -42,6 +42,10 @@ public class AppointmentService implements AppointmentInterface {
             throw new IllegalArgumentException("La date de rendez-vous est déjà prise");
         }
     }
+    
+    public List<Appointment> getAllAppointments(Long id) {
+        return appointmentRepository.findAllByDoctorIdUser(id);
+    }
 
     @Override
     public Appointment updateAppointment(Appointment appointment) {

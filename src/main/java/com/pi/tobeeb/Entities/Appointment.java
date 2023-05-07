@@ -20,13 +20,11 @@ import java.time.format.DateTimeFormatter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Appointment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idAppointment;
     @Enumerated(EnumType.STRING)
-
     private Type type;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
@@ -38,18 +36,16 @@ public class Appointment implements Serializable {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime dateEnd;
 
-// ...
+    @ManyToOne
+    User patient;
 
+    @ManyToOne
+    User doctor;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "consultation_file_id")
     private ConsultationFile consultationFile;
 
 
-    @ManyToOne
-    User patient;
-
-    @ManyToOne
-    User doctor;
 
 }

@@ -1,4 +1,5 @@
 package com.pi.tobeeb.Entities;
+import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,10 +21,16 @@ public class ConsultationFile implements Serializable {
     private Long idFile;
     private String doctorNotes;
 
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "prescription_id")
+    private Prescription prescription;
 
-
+    @OneToMany(mappedBy = "file")
+    @JsonIgnore
+    private List<Test> test;
 
     @OneToOne(mappedBy = "consultationFile", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Appointment appointment;
 
 }
