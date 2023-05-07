@@ -61,9 +61,9 @@ public class AppointmentController {
         return new ResponseEntity<>(appointment, HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<List<AppointmentDTO>> getAllAppointments() {
-        List<Appointment> appointments = appointmentService.getAllAppointments();
+    @GetMapping("/doctor/{id}")
+    public ResponseEntity<List<AppointmentDTO>> getAppointmentForDoctor(@PathVariable Long id) {
+        List<Appointment> appointments = appointmentService.getAllAppointments(id);
         System.out.println(appointments);
         List<AppointmentDTO> appointmentDTOS = new ArrayList<>();
         for (Appointment appointment : appointments) {
@@ -73,7 +73,12 @@ public class AppointmentController {
             appointmentDTO.setDoctorId(appointment.getDoctor().getId());
             appointmentDTO.setPatientId(appointment.getPatient().getId());
             appointmentDTO.setPatient(appointment.getPatient().getUsername());
-            appointmentDTO.setConsultationFileId(appointment.getConsultationFile().getIdFile());
+            if (appointment.getConsultationFile() == null) {
+                appointmentDTO.setConsultationFileId(0L);
+            }
+            else {
+                appointmentDTO.setConsultationFileId(appointment.getConsultationFile().getIdFile());
+            }
             appointmentDTO.setDateStart(appointment.getDateStart());
             appointmentDTOS.add(appointmentDTO);
         }

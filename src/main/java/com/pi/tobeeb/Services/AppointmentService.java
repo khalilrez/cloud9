@@ -54,8 +54,8 @@ public class AppointmentService {
         return appointmentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Appointment", "id", id));
     }
 
-    public List<Appointment> getAllAppointments() {
-        return appointmentRepository.findAll();
+    public List<Appointment> getAllAppointments(Long id) {
+        return appointmentRepository.findAllByDoctorIdUser(id);
     }
 
     public Appointment updateAppointment(Long id ,Appointment appointment) {

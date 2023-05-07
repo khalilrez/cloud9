@@ -21,7 +21,7 @@ public class ConsultationFile implements Serializable {
     private Long idFile;
     private String doctorNotes;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "prescription_id")
     private Prescription prescription;
 

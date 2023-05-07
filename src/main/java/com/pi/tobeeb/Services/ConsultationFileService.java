@@ -134,6 +134,8 @@ public class ConsultationFileService {
     }
 
 
+
+
     public Prescription getPrescriptionById(Long id){
         return prescriptionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Prescription", "id", id));
     }
