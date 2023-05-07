@@ -174,14 +174,23 @@ public class UserService {
 
     public User update(Long id, User user) throws IOException {
         User user2 = repoUser.findByIdUser(id);
-      user2.setEmail(user.getEmail());
-      user2.setImageProfile(user.getImageProfile());
-      user2.setPhonenumber(user.getPhonenumber());
-      user2.setUsername(user.getUsername());
-      user2.setAge(user.getAge());
-      user2.setBloodType(user.getBloodType());
-      user.setFirstName(user.getFirstName());
-      user.setLastName(user.getLastName());
+        user2.setEmail(user.getEmail());
+        user2.setImageProfile(user.getImageProfile());
+        user2.setPhonenumber(user.getPhonenumber());
+        user2.setAge(user.getAge());
+        user2.setBloodType(user.getBloodType());
+        user2.setFirstName(user.getFirstName());
+        user2.setLastName(user.getLastName());
+        user2.setCertificate(user.getCertificate());
+        user2.setHeight(user.getHeight());
+        user2.setWeight(user.getWeight());
+        user2.setHourForWorkingEnd(user.getHourForWorkingEnd());
+        user2.setHourForWorkingStart(user.getHourForWorkingStart());
+        user2.setCity(user.getCity());
+        user2.setEducation(user.getEducation());
+        user2.setSpeciality(user.getSpeciality());
+        user2.setGender(user.getGender());
+        user2.setPostCode(user.getPostCode());
         return repoUser.save(user2);
     }
 

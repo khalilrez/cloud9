@@ -99,7 +99,11 @@ public class AuthController {
 
                         return new JwtResponse(jwt,
                                 userDetails.getUser().getIdUser(), userDetails.getUsername(),
-                                userDetails.getUser().getEmail(),roles,userDetails.getUser().getImageProfile());
+                                userDetails.getUser().getEmail(),roles,userDetails.getUser().getImageProfile(),userDetails.getUser().getPhonenumber(),
+                                userDetails.getUser().getSpeciality(),userDetails.getUser().getGender(),userDetails.getUser().getHeight(),userDetails.getUser().getWeight(),
+                                userDetails.getUser().getBloodType(), userDetails.getUser().getAge(),userDetails.getUser().getEducation(),userDetails.getUser().getCertificate(),userDetails.getUser().getFirstName(),userDetails.getUser().getLastName(),
+                                userDetails.getUser().getHourForWorkingStart(),userDetails.getUser().getHourForWorkingEnd(),userDetails.getUser().getCity(),userDetails.getUser().getPostCode()
+                        );
 
                     }
                     return new JwtResponse(230);
