@@ -43,6 +43,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("/api/appointments")
 public class AppointmentController {
     @Autowired
     AppointmentService appointmentService;
@@ -103,7 +104,7 @@ public class AppointmentController {
         List<AppointmentDTO> appointmentDTOS = new ArrayList<>();
         for (Appointment appointment : appointments) {
             AppointmentDTO appointmentDTO  = new AppointmentDTO();
-            appointmentDTO.setIdAppointment(appointment.getIdAppointment());
+            appointmentDTO.setIdAppointment((long) appointment.getIdAppointment());
             appointmentDTO.setDoctor(appointment.getDoctor().getUsername());
             appointmentDTO.setDoctorId(appointment.getDoctor().getId());
             appointmentDTO.setPatientId(appointment.getPatient().getId());

@@ -13,6 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -25,5 +26,5 @@ public class ConsultationFileDTO implements Serializable {
     private Long prescriptionId;
     private Long appointmentId;
     @DateTimeFormat(pattern = "yyyy-MM-JJ")
-    private LocalDate appointmentDate;
+    private LocalDateTime appointmentDate;
 }

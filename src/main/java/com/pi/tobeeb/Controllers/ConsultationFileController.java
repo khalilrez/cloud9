@@ -88,7 +88,7 @@ public class ConsultationFileController {
     }
 
     @GetMapping("/appointment/{id}")
-    public ResponseEntity<ConsultationFileDTO> getConsultationFileByAppointment(@PathVariable Long id) {
+    public ResponseEntity<ConsultationFileDTO> getConsultationFileByAppointment(@PathVariable int id) {
         ConsultationFile consultationFile =  consultationFileService.getConsultationFileByAppointment(id);
         ConsultationFileDTO consultationFileDTO = consultationFileModelToDTO(consultationFile);
         return new ResponseEntity<>(consultationFileDTO,HttpStatus.OK);
@@ -120,7 +120,7 @@ public class ConsultationFileController {
     }
 
     @PutMapping("/prescription/{id}")
-    public ResponseEntity<ConsultationFileDTO> updatePrescription(@PathVariable Long id, @RequestBody String content){
+    public ResponseEntity<ConsultationFileDTO> updatePrescription(@PathVariable int id, @RequestBody String content){
         ConsultationFile consultationFile = consultationFileService.getConsultationFileByAppointment(id);
         consultationFile.getPrescription().setContent(content);
         consultationFileRepository.save(consultationFile);
@@ -128,7 +128,7 @@ public class ConsultationFileController {
         return new ResponseEntity<>(consultationFileDTO,HttpStatus.OK);
     }
     @PutMapping("/note/{id}")
-    public ResponseEntity<ConsultationFileDTO> updateNote(@PathVariable Long id, @RequestBody String content){
+    public ResponseEntity<ConsultationFileDTO> updateNote(@PathVariable int id, @RequestBody String content){
         logger.info("THE VARIABLES CONTAINS : "+ content);
         ConsultationFile consultationFile = consultationFileService.getConsultationFileByAppointment(id);
         consultationFile.setDoctorNotes(content);
@@ -163,7 +163,7 @@ public class ConsultationFileController {
         ConsultationFileDTO consultationFileDTO = new ConsultationFileDTO();
         consultationFileDTO.setIdFile(consultationFile.getIdFile());
         consultationFileDTO.setDoctorNotes(consultationFile.getDoctorNotes());
-        consultationFileDTO.setAppointmentId(consultationFile.getAppointment().getIdAppointment());
+        consultationFileDTO.setAppointmentId((long) consultationFile.getAppointment().getIdAppointment());
         consultationFileDTO.setPrescriptionId(consultationFile.getPrescription().getIdPrescription());
         consultationFileDTO.setAppointmentDate(consultationFile.getAppointment().getDateStart());
         return  consultationFileDTO;

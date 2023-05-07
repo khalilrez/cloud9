@@ -44,7 +44,7 @@ public class AppointmentService implements AppointmentInterface {
     }
     
     public List<Appointment> getAllAppointments(Long id) {
-        return appointmentRepository.findAllByDoctorIdUser(id);
+        return appointmentRepo.findAllByDoctorIdUser(id);
     }
 
     @Override

@@ -21,7 +21,7 @@ public class ConsultationFile implements Serializable {
     private Long idFile;
     private String doctorNotes;
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     @JoinColumn(name = "prescription_id")
     private Prescription prescription;
 
@@ -29,7 +29,7 @@ public class ConsultationFile implements Serializable {
     @JsonIgnore
     private List<Test> test;
 
-    @OneToOne(mappedBy = "consultationFile", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "consultationFile", cascade = CascadeType.MERGE)
     @JsonIgnore
     private Appointment appointment;
 

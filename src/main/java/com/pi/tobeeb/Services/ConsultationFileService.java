@@ -1,7 +1,7 @@
 package com.pi.tobeeb.Services;
 
 import com.pi.tobeeb.Entities.*;
-import com.pi.tobeeb.Enums.AppointmentStatus;
+
 import com.pi.tobeeb.Exceptions.ResourceNotFoundException;
 import com.pi.tobeeb.Repositorys.*;
 import com.pi.tobeeb.Utils.ImageUtils;
@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,24 +47,26 @@ public class ConsultationFileService {
     @Value("${app.upload.dir}")
     private String uploadDir;
 
-    @Scheduled(fixedDelay = 24 * 60 * 60 * 1000) // run once per day
-    //@Scheduled(fixedRate = 5000) // 30 seconds = 30,000 milliseconds
+    //@Scheduled(fixedDelay = 24 * 60 * 60 * 1000) // run once per day
+    @Scheduled(fixedRate = 5000) // 30 seconds = 30,000 milliseconds
     public void checkExpiredAppointments() {
-        List<Appointment> expiredAppointments = appointmentRepository.findByDateStartLessThanEqual(LocalDate.now());
-        logger.info("IN SCHEDULED METHOD ( CONSULTATION FILE SERVICE");
+        LocalDateTime currentDate = LocalDateTime.now();
+        List<Appointment> expiredAppointments = appointmentRepository.findAll();
+        logger.info("IN SCHEDULED METHOD ( CONSULTATION FILE SERVICE ) ");
         for (Appointment appointment : expiredAppointments) {
-            if(appointment.getStatus().equals(AppointmentStatus.COMPLETE) && appointment.getConsultationFile() == null){
+            LocalDateTime reservationDate = appointment.getDateStart();
+            logger.info(String.valueOf(reservationDate.isBefore(currentDate.plusDays(1)) && appointment.getConsultationFile() == null));
+            if(reservationDate.isBefore(currentDate.plusDays(1)) && appointment.getConsultationFile() == null){
             ConsultationFile consultationFile = new ConsultationFile();
             //CREATE PRESCRIPTION & SAVE
             Prescription prescription = new Prescription();
             prescription.setCreationDate(LocalDate.now());
+            prescription.setConsultationFile(consultationFile);
             prescriptionRepository.save(prescription);
-
             //SET CONSULTATION FILE ATTRIBUTES & SAVE
             consultationFile.setAppointment(appointment);
             consultationFile.setPrescription(prescription);
             consultationFileRepository.save(consultationFile);
-
             appointment.setConsultationFile(consultationFile);
             appointmentRepository.save(appointment);
             }
@@ -117,7 +120,7 @@ public class ConsultationFileService {
 
 
 
-    public ConsultationFile getConsultationFileByAppointment(Long id) {
+    public ConsultationFile getConsultationFileByAppointment(int id) {
         return consultationFileRepository.findByAppointment_IdAppointment(id)
                 .orElseThrow(() -> new EntityNotFoundException("ConsultationFile not found with id: " + id));
     }
