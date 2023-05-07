@@ -623,3 +623,38 @@ Starting...
 BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5a1a5521]] 
 Started. 
 Started TobeebApplication in 2.857 seconds (JVM running for 3.177) 
+Starting TobeebApplication using Java 19.0.2 on sofien-GF63-Thin-9SC with PID 27990 (/home/sofien/projects/cloud9/target/classes started by sofien in /home/sofien/projects/cloud9) 
+No active profile set, falling back to 1 default profile: "default" 
+Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable 
+For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG' 
+Bootstrapping Spring Data JPA repositories in DEFAULT mode. 
+Finished Spring Data repository scanning in 100 ms. Found 18 JPA repository interfaces. 
+Tomcat initialized with port(s): 8075 (http) 
+Starting service [Tomcat] 
+Starting Servlet engine: [Apache Tomcat/9.0.73] 
+Initializing Spring embedded WebApplicationContext 
+Root WebApplicationContext: initialization completed in 938 ms 
+spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning 
+HHH000204: Processing PersistenceUnitInfo [name: default] 
+HHH000412: Hibernate ORM core version 5.6.15.Final 
+HCANN000001: Hibernate Commons Annotations {5.1.2.Final} 
+HikariPool-1 - Starting... 
+HikariPool-1 - Start completed. 
+HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect 
+HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform] 
+Initialized JPA EntityManagerFactory for persistence unit 'default' 
+Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@71b252c4, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7bf6279f, org.springframework.security.web.context.SecurityContextPersistenceFilter@b2e5df8, org.springframework.security.web.header.HeaderWriterFilter@6d01238b, org.springframework.web.filter.CorsFilter@5ff36b61, org.springframework.security.web.authentication.logout.LogoutFilter@125ce9a5, com.pi.tobeeb.Jwt.AuthTokenFilter@683a9306, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@73ddf620, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4c95c54c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7ab0f48d, org.springframework.security.web.session.SessionManagementFilter@226cc1c7, org.springframework.security.web.access.ExceptionTranslationFilter@49cc7879, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@24c92c0b] 
+Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false) 
+LiveReload server is running on port 35729 
+Tomcat started on port(s): 8075 (http) with context path '' 
+Starting... 
+BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@30fb551d]] 
+Started. 
+Started TobeebApplication in 3.469 seconds (JVM running for 3.969) 
+IN SCHEDULED METHOD ( CONSULTATION FILE SERVICE )  
+Stopping... 
+BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@30fb551d]] 
+Stopped. 
+Closing JPA EntityManagerFactory for persistence unit 'default' 
+HikariPool-1 - Shutdown initiated... 
+HikariPool-1 - Shutdown completed. 
