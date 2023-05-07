@@ -18,7 +18,7 @@ public class JwtUtils {
 
 
 
-    private String jwtSecret="404E635266556A586E327235753878233EEEEDBBBLL00F413F4428472B4B6250645334GGGG66668KJNFDE67067566B5970";
+    private String jwtSecret="404E635266556A586E3RR27235753878233EEEEDBBBLL00F413F4428472B4B6250645334GGGG66668KJNFDE67067566B5970";
 
     //byte[] keyBytes = Keys.secretKeyFor(SignatureAlgorithm.HS512).getEncoded();
 
@@ -33,7 +33,7 @@ public class JwtUtils {
                 .claim("roles",userPrincipal.getAuthorities().toString())
                 .setSubject((userPrincipal.getUsername()))
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, getSignInKey())
                 .compact();
     }
