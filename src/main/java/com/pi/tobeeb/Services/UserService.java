@@ -168,15 +168,9 @@ public class UserService {
         }
         return ResponseEntity.ok(new MessageResponse(response));
     }
-<<<<<<< HEAD
+
     public void delete(String userName){
         User u= repoUser.findByUsername(userName).orElse(null);
-=======
-
-    public void delete(Long id){
-        User u= repoUser.findByIdUser(id);
-        logger.info(u.getEmail());
->>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
         u.getRole().clear();
         repoUser.delete(u);
     }
@@ -247,7 +241,7 @@ public class UserService {
         return false;
 
 }
-public List <User> GetByRole(String role){
+public List <User> GetByRole(ERole role){
         return repoUser.findByRoleName(role);
 }
 
@@ -268,16 +262,8 @@ public List <User> GetByRole(String role){
         }
     }
 
-<<<<<<< HEAD
-=======
-
     public List < User > findAll() {
         return repoUser.findAll();
     }
 
-
-
-
-
->>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
 }

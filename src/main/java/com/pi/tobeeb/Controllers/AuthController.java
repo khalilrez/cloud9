@@ -276,18 +276,13 @@ public class AuthController {
     public ResponseEntity<?> resetPasswordSMS (@RequestBody SmsNewPwd newPassword) {
         return userService.resetSMS(newPassword);
     }
-<<<<<<< HEAD
 
     @DeleteMapping ({"/delete/{userName}"})
     @PreAuthorize("hasRole('ROLE_ADMIN')")
 
     public void delete(@PathVariable String userName){
         userService.delete(userName);
-=======
-    @DeleteMapping ({"/delete/{id}"})
-    public void delete(@PathVariable Long id){
-        userService.delete(id);
->>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
+
     }
 
     @PutMapping(value="/update/{id}")
@@ -323,10 +318,5 @@ public class AuthController {
     public User GetDoctorById(@PathVariable Long id) {
         return userRepository.findByIdUser( id);
     }
-<<<<<<< HEAD
-=======
+
 }
-
-
-
->>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
