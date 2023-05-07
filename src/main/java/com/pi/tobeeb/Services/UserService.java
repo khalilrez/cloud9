@@ -168,8 +168,15 @@ public class UserService {
         }
         return ResponseEntity.ok(new MessageResponse(response));
     }
+<<<<<<< HEAD
     public void delete(String userName){
         User u= repoUser.findByUsername(userName).orElse(null);
+=======
+
+    public void delete(Long id){
+        User u= repoUser.findByIdUser(id);
+        logger.info(u.getEmail());
+>>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
         u.getRole().clear();
         repoUser.delete(u);
     }
@@ -177,13 +184,25 @@ public class UserService {
 
     public User update(Long id, User user) throws IOException {
         User user2 = repoUser.findByIdUser(id);
-      user2.setEmail(user.getEmail());
-      user2.setImageProfile(user.getImageProfile());
-      user2.setPhonenumber(user.getPhonenumber());
-      user2.setUsername(user.getUsername());
+        user2.setEmail(user.getEmail());
+        user2.setImageProfile(user.getImageProfile());
+        user2.setPhonenumber(user.getPhonenumber());
+        user2.setAge(user.getAge());
+        user2.setBloodType(user.getBloodType());
+        user2.setFirstName(user.getFirstName());
+        user2.setLastName(user.getLastName());
+        user2.setCertificate(user.getCertificate());
+        user2.setHeight(user.getHeight());
+        user2.setWeight(user.getWeight());
+        user2.setHourForWorkingEnd(user.getHourForWorkingEnd());
+        user2.setHourForWorkingStart(user.getHourForWorkingStart());
+        user2.setCity(user.getCity());
+        user2.setEducation(user.getEducation());
+        user2.setSpeciality(user.getSpeciality());
+        user2.setGender(user.getGender());
+        user2.setPostCode(user.getPostCode());
         return repoUser.save(user2);
     }
-
 
     public Boolean isValid(String username){
         User user = repoUser.findByUsername(username).get();
@@ -215,6 +234,7 @@ public class UserService {
         long currentTimeInMillis = System.currentTimeMillis();
 
         if (lockTimeInMillis + LOCK_TIME_DURATION < currentTimeInMillis) {
+            logger.error("hounii");
             user.setAccountNonLocked(true);
             user.setLockTime(null);
             user.setFailedAttempt(0);
@@ -226,6 +246,9 @@ public class UserService {
 
         return false;
 
+}
+public List <User> GetByRole(String role){
+        return repoUser.findByRoleName(role);
 }
 
 
@@ -245,4 +268,16 @@ public class UserService {
         }
     }
 
+<<<<<<< HEAD
+=======
+
+    public List < User > findAll() {
+        return repoUser.findAll();
+    }
+
+
+
+
+
+>>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
 }

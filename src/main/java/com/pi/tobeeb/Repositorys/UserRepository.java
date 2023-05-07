@@ -3,9 +3,13 @@ package com.pi.tobeeb.Repositorys;
 import java.util.List;
 import java.util.Optional;
 
+<<<<<<< HEAD
 import java.util.Set;
 
 import com.pi.tobeeb.Entities.Comment;
+=======
+import com.pi.tobeeb.Entities.ERole;
+>>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
 import com.pi.tobeeb.Entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -23,7 +27,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByEmail(String email);
     User  findByVerificationToken(String Token);
-
+    List <User> findByRoleName(ERole name);
 
     public User findByEmail(String UserEmail);
     @Query("SELECT u FROM User u WHERE u.isverified = 0")

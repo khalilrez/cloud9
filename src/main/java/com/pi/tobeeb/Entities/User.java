@@ -21,14 +21,40 @@ import java.util.Set;
                 @UniqueConstraint(columnNames = "email")
         })
 public class User  {
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
+ @Id
+ @GeneratedValue(strategy = GenerationType.IDENTITY)
 
  private Long idUser;
  private String username;
  private String email;
  private String password;
  private String phonenumber;
+<<<<<<< HEAD
+=======
+ private String speciality;
+ private String gender;
+ private String height;
+ private String weight;
+ private String bloodType;
+ private String age;
+ private String education;
+ @Column(name = "certificate",columnDefinition = "longtext")
+ private String certificate;
+ private String firstName;
+ private String lastName;
+ private String hourForWorkingStart;
+ private String hourForWorkingEnd;
+ private String city;
+ private String postCode;
+
+
+
+
+
+
+
+
+>>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
  //private String Location;
  @Column(name = "imageProfile",columnDefinition = "longtext")
 
@@ -90,10 +116,41 @@ public class User  {
   this.userCode = userCode;
  }
 
+<<<<<<< HEAD
  /*
   @JsonIgnore
   @OneToMany(cascade = CascadeType.ALL, mappedBy ="patient")
    private Set<Appointment> appointment; */
+=======
+ @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+ @JoinTable(name = "userRoles",
+         joinColumns = {
+                 @JoinColumn(name = "id_User")
+         },
+         inverseJoinColumns = {
+                 @JoinColumn(name = "id_Role")
+         }
+ )
+ private Set<Role> role = new HashSet<>();
+
+ @JsonIgnore
+
+ @OneToMany(cascade = CascadeType.ALL, mappedBy ="patient")
+ private Set<Appointment> appointmentP;
+ @JsonIgnore
+
+ @OneToMany(cascade = CascadeType.ALL, mappedBy ="doctor")
+ private Set<Appointment> appointmentD;
+ @OneToMany(cascade = CascadeType.ALL, mappedBy ="user")
+ private Set<Order2> order2s;
+
+ @OneToMany(mappedBy = "user1", cascade = CascadeType.ALL, orphanRemoval = true)
+ private Set<Conversation> conversationAsUser1 = new HashSet<>();
+
+ @OneToMany(mappedBy = "user2", cascade = CascadeType.ALL, orphanRemoval = true)
+ private Set<Conversation> conversationAsUser2 = new HashSet<>();
+
+>>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
 
  public User(String username, String email, String password) {
   this.username = username;
@@ -151,9 +208,116 @@ public class User  {
  public int getIsverified() {
   return isverified;
  }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
 
  public void setIsverified(int isverified) {
   this.isverified = isverified;
+ }
+
+ public String getGender() {
+  return gender;
+ }
+
+ public void setGender(String gender) {
+  this.gender = gender;
+ }
+
+ public String getHeight() {
+  return height;
+ }
+
+ public void setHeight(String height) {
+  this.height = height;
+ }
+
+ public String getWeight() {
+  return weight;
+ }
+
+ public void setWeight(String weight) {
+  this.weight = weight;
+ }
+
+ public String getBloodType() {
+  return bloodType;
+ }
+
+ public void setBloodType(String bloodType) {
+  this.bloodType = bloodType;
+ }
+
+ public String getAge() {
+  return age;
+ }
+
+ public void setAge(String age) {
+  this.age = age;
+ }
+
+ public String getEducation() {
+  return education;
+ }
+
+ public void setEducation(String education) {
+  this.education = education;
+ }
+
+ public String getCertificate() {
+  return certificate;
+ }
+
+ public void setCertificate(String certificate) {
+  this.certificate = certificate;
+ }
+
+ public String getFirstName() {
+  return firstName;
+ }
+
+ public void setFirstName(String firstName) {
+  this.firstName = firstName;
+ }
+
+ public String getLastName() {
+  return lastName;
+ }
+
+ public void setLastName(String lastName) {
+  this.lastName = lastName;
+ }
+
+ public String getHourForWorkingStart() {
+  return hourForWorkingStart;
+ }
+
+ public void setHourForWorkingStart(String hourForWorkingStart) {
+  this.hourForWorkingStart = hourForWorkingStart;
+ }
+
+ public String getHourForWorkingEnd() {
+  return hourForWorkingEnd;
+ }
+
+ public void setHourForWorkingEnd(String hourForWorkingEnd) {
+  this.hourForWorkingEnd = hourForWorkingEnd;
+ }
+
+ public String getCity() {
+  return city;
+ }
+
+ public void setCity(String city) {
+  this.city = city;
+ }
+
+ public String getPostCode() {
+  return postCode;
+ }
+
+ public void setPostCode(String postCode) {
+  this.postCode = postCode;
  }
 }
