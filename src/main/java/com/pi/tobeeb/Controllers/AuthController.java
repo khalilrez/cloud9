@@ -286,8 +286,6 @@ public class AuthController {
     }
 
     @DeleteMapping ({"/delete/{userName}"})
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-
     public void delete(@PathVariable String userName){
         userService.delete(userName);
 
