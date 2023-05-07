@@ -1,12 +1,12 @@
 package com.pi.tobeeb.Payload.response;
 
+
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class JwtResponse {
     private String token;
     private String type = "Bearer";
@@ -14,6 +14,7 @@ public class JwtResponse {
     private String username;
     private String email;
     private List<String> roles;
+
 
     private String imageProfile;
     private int statusCode;
@@ -244,6 +245,7 @@ public class JwtResponse {
         this.username = username;
         this.email = email;
         this.roles = roles;
+
         this.imageProfile=img;
     }
 

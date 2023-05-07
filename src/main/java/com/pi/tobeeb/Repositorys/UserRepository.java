@@ -3,6 +3,7 @@ package com.pi.tobeeb.Repositorys;
 import java.util.List;
 import java.util.Optional;
 
+
 import java.util.Set;
 
 import com.pi.tobeeb.Entities.Comment;
@@ -18,12 +19,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
+
     User findByIdUser(Long id);
 
     Boolean existsByUsername(String username);
 
     Boolean existsByEmail(String email);
     User  findByVerificationToken(String Token);
+
     List <User> findByRoleName(ERole name);
 
     public User findByEmail(String UserEmail);
@@ -33,6 +36,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findVerifiedUsers();
 
     public User findByphonenumber(String phone);
+
     @Modifying
     @Query("UPDATE User u SET u.failedAttempt = ?1 WHERE u.username = ?2")
     public void updateFailedAttempts(int failAttempts, String username);

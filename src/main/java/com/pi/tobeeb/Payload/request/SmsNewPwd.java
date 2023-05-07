@@ -9,6 +9,7 @@ public class SmsNewPwd {
     private String phone;
     private String code;
     private String password;
+
 	public String getPhone() {
 		return phone;
 	}

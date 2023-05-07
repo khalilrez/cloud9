@@ -1,6 +1,7 @@
 package com.pi.tobeeb.Services;
 
 
+
 import com.pi.tobeeb.Controllers.AuthController;
 import com.pi.tobeeb.Entities.ERole;
 import com.pi.tobeeb.Entities.ResetToken;
@@ -27,6 +28,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,7 +44,6 @@ import java.util.*;
 
 @Service
 @Transactional
-
 public class UserService {
     private Logger logger = LoggerFactory.getLogger(UserService.class);
     public static final int MAX_FAILED_ATTEMPTS = 3;
@@ -53,7 +54,6 @@ public class UserService {
     @Autowired
     private JavaMailSender userMailSender;
     @Autowired
-
     private RoleRepository roleDao;
 
     @Autowired
@@ -66,6 +66,7 @@ public class UserService {
     @Autowired
 
     private EmailService emailService;
+
 
     public void initRoleAndUser() {
 
@@ -176,6 +177,7 @@ public class UserService {
     }
 
 
+
     public User update(Long id, User user) throws IOException {
         User user2 = repoUser.findByIdUser(id);
         user2.setEmail(user.getEmail());
@@ -206,6 +208,7 @@ public class UserService {
             return false;
 
     }
+
     //login attempts
     public void increaseFailedAttempts(User user) {
         int newFailAttempts = user.getFailedAttempt() + 1;

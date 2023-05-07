@@ -1,4 +1,5 @@
 package com.pi.tobeeb.Services;
+
 import java.io.Serializable;
 
 import com.pi.tobeeb.Entities.User;
@@ -35,6 +36,7 @@ public class EmailService implements IUserEmailRepository {
         user.setVerificationToken(verificationTokenService.generateVerificationToken());
         message.setSubject("Vérification du compte");
         message.setText("Bonjour " + user.getUsername() + ",\n\n" +
+
                 "Veuillez cliquerr sur le lien ci-dessouus pour activer votre compte :\n\n" +
                 "http://localhost:4200/activate?token=" + user.getVerificationToken());
 
@@ -45,11 +47,13 @@ public class EmailService implements IUserEmailRepository {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom("tobeeb2023@gmail.com");
         simpleMailMessage.setTo(mail.getTo());
+
         simpleMailMessage.setSubject("Code Active!!");
         simpleMailMessage.setText("Hello This code will let you change your forget password");
         simpleMailMessage.setText(mail.getCode());
         userMailSender.send(simpleMailMessage);
     }
+
     public void sendConfirmationEmail(String recipientEmail) throws MessagingException {
         MimeMessage message = userMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -58,7 +62,5 @@ public class EmailService implements IUserEmailRepository {
         helper.setText("Votre rendez-vous  a été ajouté avec succès.");
         userMailSender.send(message);
     }
-
-
 
 }

@@ -1,7 +1,6 @@
 package com.pi.tobeeb.Services;
 
 import com.pi.tobeeb.Entities.*;
-
 import com.pi.tobeeb.Exceptions.ResourceNotFoundException;
 import com.pi.tobeeb.Repositorys.*;
 import com.pi.tobeeb.Utils.ImageUtils;
@@ -15,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,6 +47,7 @@ public class ConsultationFileService {
     @Value("${app.upload.dir}")
     private String uploadDir;
 
+
     //@Scheduled(fixedDelay = 24 * 60 * 60 * 1000) // run once per day
     @Scheduled(fixedRate = 5000) // 30 seconds = 30,000 milliseconds
     public void checkExpiredAppointments() {
@@ -61,6 +62,7 @@ public class ConsultationFileService {
             //CREATE PRESCRIPTION & SAVE
             Prescription prescription = new Prescription();
             prescription.setCreationDate(LocalDate.now());
+
             prescription.setConsultationFile(consultationFile);
             prescriptionRepository.save(prescription);
             //SET CONSULTATION FILE ATTRIBUTES & SAVE
@@ -135,9 +137,6 @@ public class ConsultationFileService {
         return consultationFiles;
 
     }
-
-
-
 
     public Prescription getPrescriptionById(Long id){
         return prescriptionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Prescription", "id", id));

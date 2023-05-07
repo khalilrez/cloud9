@@ -5,12 +5,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+
 import java.util.Date;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
+
 @Setter
 //@NoArgsConstructor
 @AllArgsConstructor
@@ -21,14 +24,15 @@ import java.util.Set;
                 @UniqueConstraint(columnNames = "email")
         })
 public class User  {
+
  @Id
  @GeneratedValue(strategy = GenerationType.IDENTITY)
-
  private Long idUser;
  private String username;
  private String email;
  private String password;
  private String phonenumber;
+
 
  private String speciality;
  private String gender;
@@ -70,6 +74,7 @@ public class User  {
          }
  )
  private Set<Role> role = new HashSet<>();
+
  public User() {
 
  }
@@ -182,6 +187,7 @@ public class User  {
  public int getIsverified() {
   return isverified;
  }
+
 
 
  public void setIsverified(int isverified) {

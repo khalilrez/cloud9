@@ -1,5 +1,6 @@
 package com.pi.tobeeb.Controllers;
 
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import com.pi.tobeeb.Entities.User;
 
@@ -74,6 +76,7 @@ public class AuthController {
     JwtUtils jwtUtils;
     @Autowired
     private VerificationTokenService verificationTokenService;
+
 
 
 
@@ -155,6 +158,7 @@ public class AuthController {
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
+
         Set<String> strRoles = signUpRequest.getRole();
         logger.error(strRoles.toString());
         Set<Role> roles = new HashSet<>();
@@ -163,6 +167,7 @@ public class AuthController {
         logger.error(String.valueOf(strRoles));
 
         if (strRoles == null) {
+
             Role userRole = roleRepository.findByName(ERole.ROLE_PATIENT)
 
                     .orElseThrow(() -> new RuntimeException("Error: Role5 is not found."));
@@ -184,12 +189,14 @@ public class AuthController {
 
                         break;
                     default:
+
                         Role userRole = roleRepository.findByName(ERole.ROLE_PHARMACY)
                                 .orElseThrow(() -> new RuntimeException("Error: Role1 is not found."));
                         roles.add(userRole);
                 }
             });
         }
+
 
         /*Set<ERole> roles =  signUpRequest.getRole();
         Set<Role> valid_roles = new HashSet<Role>(){
@@ -211,6 +218,7 @@ public class AuthController {
 
     @PutMapping("/activate/{verificationToken}")
     public ResponseEntity activateAccount(@PathVariable String verificationToken) {
+
         logger.error("tokeen");
         logger.error(verificationToken);
 

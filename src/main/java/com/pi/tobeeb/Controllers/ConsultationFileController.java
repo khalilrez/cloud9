@@ -7,6 +7,7 @@ import com.pi.tobeeb.Entities.Appointment;
 import com.pi.tobeeb.Entities.ConsultationFile;
 import com.pi.tobeeb.Entities.Prescription;
 import com.pi.tobeeb.Entities.Test;
+
 import com.pi.tobeeb.Repositorys.ConsultationFileRepository;
 import com.pi.tobeeb.Services.ConsultationFileService;
 import org.slf4j.Logger;
@@ -30,6 +31,7 @@ public class ConsultationFileController {
 
     @Autowired
     private ConsultationFileService consultationFileService;
+
     @Autowired
     private ConsultationFileRepository consultationFileRepository;
 
@@ -114,10 +116,12 @@ public class ConsultationFileController {
         PrescriptionDTO prescriptionDTO = new PrescriptionDTO();
         Prescription prescription = consultationFileService.getPrescriptionById(id);
         prescriptionDTO.setPrescriptionId(prescription.getIdPrescription());
+
         prescriptionDTO.setContent(prescription.getContent());
         prescriptionDTO.setDate(prescription.getCreationDate());
         return  new ResponseEntity<>(prescriptionDTO,HttpStatus.OK);
     }
+
 
     @PutMapping("/prescription/{id}")
     public ResponseEntity<ConsultationFileDTO> updatePrescription(@PathVariable int id, @RequestBody String content){

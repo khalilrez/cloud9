@@ -13,6 +13,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 
 @Getter
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 public class AppointmentDTO implements Serializable {
     private Long idAppointment;
     private TypeAppointment type;
+
     private LocalDateTime dateStart;
     private AppointmentStatus status;
     private String patient;
