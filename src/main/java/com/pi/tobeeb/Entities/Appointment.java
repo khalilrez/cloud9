@@ -46,6 +46,7 @@ public class Appointment implements Serializable {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "consultation_file_id")
+    @JsonIgnore
     private ConsultationFile consultationFile;
 
 

@@ -207,7 +207,7 @@ public class AuthController {
         });
         user.setRoles(valid_roles);*/
         userRepository.save(user);
-        //emailService.sendVerificationEmail(user);
+        emailService.sendVerificationEmail(user);
         UserVerificationToken verificationToken = verificationTokenService.createVerificationToken(user); // création du jeton de vérification
         verificationTokenService.saveVerificationToken(verificationToken);
         System.out.println(verificationToken.toString());
