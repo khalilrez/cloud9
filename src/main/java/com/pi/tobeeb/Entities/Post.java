@@ -43,10 +43,15 @@ public class Post {
 
 
     public Post(Long idPost, String namePost, String contentPost, Timestamp createdAt ) {
+
         this.idPost = idPost;
         this.namePost = namePost;
         this.contentPost = contentPost;
+        this.imageUrl = imageUrl;
+
+
     }
+
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
