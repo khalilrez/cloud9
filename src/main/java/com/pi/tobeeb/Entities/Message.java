@@ -28,6 +28,7 @@ public class Message {
     
     @ManyToOne
     @JoinColumn(name = "user_id")
+	@JsonIgnore
     private User user;
     
     private String file;

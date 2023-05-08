@@ -41,10 +41,12 @@ public class Conversation {
     
     @ManyToOne
     @JoinColumn(name = "user1_id")
+	@JsonIgnore
     private User user1;
     
     @ManyToOne
     @JoinColumn(name = "user2_id")
+	@JsonIgnore
     private User user2;
 
 	public Long getId() {

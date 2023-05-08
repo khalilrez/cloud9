@@ -162,61 +162,22 @@ public class ConversationController {
 
 
 
-      /* @PostMapping("/uploadFile")
-
+      @PostMapping("/uploadFile")
         @ResponseBody
         public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
             try {
                 // Get the file and save it somewhere
-<<<<<<< HEAD
-            	
-                byte[] bytes = file.getBytes();
-                Path path = Paths.get(uploadFolderPath,file.getOriginalFilename());
-                Files.write(path, bytes);
-                
-=======
-
                 byte[] bytes = file.getBytes();
                 Path path = Paths.get(uploadFolderPath,file.getOriginalFilename());
                 Files.write(path, bytes);
 
->>>>>>> 01b6b2f5f54308856f57b5529be5a9ea7e3e5660
             } catch (IOException e) {
                 e.printStackTrace();
                 return new ResponseEntity<>("Failed to upload file", HttpStatus.INTERNAL_SERVER_ERROR);
             }
             return new ResponseEntity<>("File uploaded successfully", HttpStatus.OK);
-<<<<<<< HEAD
         }
-    
-        @GetMapping("/file/{filename}")
-        public ResponseEntity<?> getFile(@PathVariable(value = "filename") String filename) throws IOException, URISyntaxException {
-        	try {
-                Resource resource = resourceLoader.getResource("./src/main/resources/static/upload/" + filename);
-                InputStream inputStream = resource.getInputStream();
-                // Now you can read the contents of the file from the inputStream
-                // and return it in the response body or do anything else with it.
-                return ResponseEntity.ok("File opened successfully.");
-            } catch (IOException e) {
-                e.printStackTrace();
-                return new ResponseEntity<>("Failed to open file", HttpStatus.INTERNAL_SERVER_ERROR);
-            }}
-    @RequestMapping(value="/messages/{id}",method=RequestMethod.GET)
-	public List<Message> getMessageConversation(@PathVariable Long id){
-		return messageRepository.getMessageByConvId(id);
-	}
 
-    @RequestMapping(value="/{idsend}/{idrec}",method=RequestMethod.GET)
-	public Conversation getConversation(@PathVariable(value = "idsend") Long idsend,@PathVariable(value = "idrec")Long idrec ){
-		return conversationRepository.getConverBy2User(idsend, idrec);
-	}
-    @RequestMapping(value="/getconveruser/{id}",method=RequestMethod.GET)
-	public List<Conversation> getAllConversationsUsers(@PathVariable Long id){
-		return conversationRepository.getConverByUser(id);
-	}
-}
-=======
-        } */
 
     @GetMapping("/file/{filename}")
     public ResponseEntity<?> getFile(@PathVariable(value = "filename") String filename) throws IOException, URISyntaxException {

@@ -190,7 +190,7 @@ public class AuthController {
                         break;
                     default:
 
-                        Role userRole = roleRepository.findByName(ERole.ROLE_PHARMACY)
+                        Role userRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Role1 is not found."));
                         roles.add(userRole);
                 }
@@ -206,6 +206,7 @@ public class AuthController {
             valid_roles.add(userRole);
         });
         user.setRoles(valid_roles);*/
+        user.setRoles(roles);
         userRepository.save(user);
         emailService.sendVerificationEmail(user);
         UserVerificationToken verificationToken = verificationTokenService.createVerificationToken(user); // création du jeton de vérification
