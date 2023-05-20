@@ -22,7 +22,7 @@ The following technologies and frameworks were used in the development of this p
 - Java
 - Spring Boot
 - Spring Data JPA
-- MySQL (or any other database of your choice)
+- MySQL
 - Maven
 
 The combination of these technologies ensures a robust and efficient backend implementation for the healthcare management system.
